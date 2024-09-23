@@ -69,15 +69,15 @@ export default function VocabDisplay() {
   };
 
   const handleAudioEnded = () => {
-    setIsPlaying(false);
     setTimeout(() => {
       if (currentAudioIndex < audioSequence.length - 1) {
         setCurrentAudioIndex((prevIndex) => prevIndex + 1);
         setIsPlaying(true);
       } else {
-        setCurrentAudioIndex(0);
-      }
-    }, nextWordDelay * 1000);
+        nextWord();
+        setIsPlaying(true);
+      }      
+    }, nextWordDelay * 500);
   };
 
   const toggleAudioType = (audioType: string) => {
@@ -98,26 +98,17 @@ export default function VocabDisplay() {
   }, [currentWordIndex, currentAudioIndex, audioSequence, isPlaying]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 font-sans p-6">
-
-  <div className="flex flex-col md:flex-row justify-center items-start h-screen space-y-4 md:space-y-0 md:space-x-6 mb-6 overflow-hidden">
-    <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl h-full flex items-center justify-center">
-      <DisplayWords word={currentWord} />
-    </div>
-    <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl h-full flex items-center justify-center">
-      <DisplayImage imagePath={getImagePath(currentWord.word_image_URL)} />
-    </div>
-  </div>
-
-
-
-      {showAdditionalInfo && (
-        <div className="w-full bg-white shadow-lg rounded-lg p-8 mb-6 transition-all duration-300 ease-in-out hover:shadow-xl">
-          <AdditionalInfo word={currentWord} />
+    <div className="flex flex-col h-screen bg-gradient-to-b from-blue-50 to-blue-100 font-sans p-4 overflow-hidden">
+      <div className="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 overflow-auto">
+        <div className="bg-white shadow-lg rounded-lg p-4 flex items-center justify-center">
+          <DisplayWords word={currentWord} />
         </div>
-      )}
+        <div className="bg-white shadow-lg rounded-lg p-4 flex items-center justify-center">
+          <DisplayImage imagePath={getImagePath(currentWord.word_image_URL)} />
+        </div>
+      </div>
 
-      <div className="flex flex-col items-center space-y-6">
+      <div className="flex flex-col items-center space-y-4">
         <AudioPlayer
           src={getAudioSource()}
           playbackRate={playbackRate}
@@ -134,23 +125,23 @@ export default function VocabDisplay() {
           onPlayPause={() => setIsPlaying((prev) => !prev)}
         />
 
-        <p className="text-sm text-gray-500">
+        <p className="text-xs text-gray-500">
           現在の再生順序: {audioSequence.join(' → ') || 'なし'}
         </p>
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="px-6 py-3 bg-indigo-600 text-white rounded-full shadow hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center space-x-2"
+          className="px-4 py-2 bg-indigo-600 text-white rounded-full shadow hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center space-x-2"
         >
-          <Settings className="w-6 h-6" />
-          <span>設定</span>
+          <Settings className="w-4 h-4" />
+          <span className="text-sm">設定</span>
         </button>
       </div>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <h2 className="text-lg font-semibold text-gray-700 mb-4">設定</h2>
+          <div className="bg-white rounded-lg p-4 w-full max-w-md max-h-[90vh] overflow-auto">
+            <h2 className="text-lg font-semibold text-gray-700 mb-2">設定</h2>
             <SettingsModal
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
@@ -165,7 +156,7 @@ export default function VocabDisplay() {
             />
             <button
               onClick={() => setIsModalOpen(false)}
-              className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 ease-in-out"
+              className="mt-2 px-3 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300 ease-in-out text-sm"
             >
               閉じる
             </button>

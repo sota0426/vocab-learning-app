@@ -1,18 +1,27 @@
-// src/components/WordDisplay.tsx
 import React from 'react';
 
 interface WordDisplayProps {
-  word: any; // 適切なインターフェースに置き換えてください
+  word: {
+    word_1_en: string;
+    word_1_ja: string;
+    word_IPA: string;
+  };
 }
 
-const Display_Words: React.FC<WordDisplayProps> = ({ word }) => {
+const DisplayWords: React.FC<WordDisplayProps> = ({ word }) => {
   return (
-     <div className="w-1/2 relative">
-        <h1 className="text-3xl font-bold">{word.word_1_en}</h1>
-        <h3 className="text-xl">{word.word_1_ja}</h3>
-        <p className="text-sm">IPA: {word.word_IPA}</p>
-      </div>
+    <div className="w-full flex flex-col items-center justify-center space-y-4 p-4">
+      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center break-words">
+        {word.word_1_en}
+      </h1>
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-center">
+        {word.word_1_ja}
+      </h2>
+      <p className="text-lg sm:text-xl md:text-2xl text-gray-600 text-center" aria-label="IPA Pronunciation">
+        {word.word_IPA}
+      </p>
+    </div>
   );
 };
 
-export default Display_Words;
+export default DisplayWords;

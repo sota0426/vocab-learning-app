@@ -31,9 +31,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     }
   }, [isPlaying, playbackRate, src]);
 
+  const handleEnded=()=>{
+    onEnded();
+  }
+
   return (
     <div className="flex space-x-2 items-center">
-      <audio ref={audioRef} src={src} onEnded={onEnded} className="hidden" />
+      <audio ref={audioRef} src={src} onEnded={handleEnded} className="hidden" />
     </div>
   );
 };
