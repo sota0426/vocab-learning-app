@@ -10,15 +10,14 @@ interface WordDisplayProps {
 
 const DisplayWords: React.FC<WordDisplayProps> = ({ word }) => {
   return (
-    <div className="w-full flex flex-col items-center justify-center space-y-4 p-4">
-      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center break-words">
+    <div className="w-full relative text-center">
+      <h1 className="font-bold" style={{ fontSize: 'clamp(10rem, 5vw, 8rem)' }}>
         {word.word_1_en}
       </h1>
-      <p className="text-lg sm:text-xl md:text-2xl text-gray-600 text-center" aria-label="IPA Pronunciation">
+      <p className="pt-2" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
         {word.word_IPA}
       </p>
-      <br />
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-center">
+      <h2 style={{ fontSize: 'clamp(1.2rem, 3vw, 3rem)' }}>
         {word.word_1_ja}
       </h2>
     </div>

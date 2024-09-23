@@ -21,8 +21,8 @@ const PlaybackSettings: React.FC<PlaybackSettingsProps> = ({
           再生速度: {playbackRate.toFixed(1)}x
           <input
             type="range"
-            min="0.5"
-            max="2"
+            min="0.7"
+            max="1.3"
             step="0.1"
             value={playbackRate}
             onChange={(e) => setPlaybackRate(parseFloat(e.target.value))}
@@ -36,7 +36,7 @@ const PlaybackSettings: React.FC<PlaybackSettingsProps> = ({
           <input
             type="range"
             min="0"
-            max="10"
+            max="4"
             step="0.5"
             value={nextWordDelay}
             onChange={(e) => setNextWordDelay(parseFloat(e.target.value))}
