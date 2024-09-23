@@ -1,6 +1,6 @@
 import React from 'react';
 import AudioTypeSelector from './AudioTypeSelector';
-import PlaybackSettings from './PlaybackSettings';
+import PlaybackSettings from './AudioPlaybackSettings';
 
 interface SettingsModalProps {
   isOpen: boolean;
