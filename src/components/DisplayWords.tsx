@@ -7,11 +7,17 @@ interface WordDisplayProps {
 
 const Display_Words: React.FC<WordDisplayProps> = ({ word }) => {
   return (
-     <div className="w-1/2 relative">
-        <h1 className="text-3xl font-bold">{word.word_1_en}</h1>
-        <h3 className="text-xl">{word.word_1_ja}</h3>
-        <p className="text-sm">IPA: {word.word_IPA}</p>
-      </div>
+    <div className="w-full relative text-center">
+      <h1 className="font-bold" style={{ fontSize: 'clamp(10rem, 5vw, 8rem)' }}>
+        {word.word_1_en}
+      </h1>
+      <p className="pt-2" style={{ fontSize: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+        {word.word_IPA}
+      </p>
+      <h2 style={{ fontSize: 'clamp(1.2rem, 3vw, 3rem)' }}>
+        {word.word_1_ja}
+      </h2>
+    </div>
   );
 };
 

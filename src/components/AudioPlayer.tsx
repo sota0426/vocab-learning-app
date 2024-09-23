@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 
 interface AudioPlayerProps {
-  src: string;
+  src: string; // 音声ファイルのURLを表す
   playbackRate: number;
   isPlaying: boolean;
   onPlay: () => void;
@@ -33,7 +33,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   return (
     <div className="flex space-x-2 items-center">
-      <audio ref={audioRef} src={src} onEnded={onEnded} className="hidden" />
+      <audio
+        ref={audioRef}
+        src={src} // ここで直接 src を使って再生
+        onEnded={onEnded}
+        className="hidden"
+      />
     </div>
   );
 };
