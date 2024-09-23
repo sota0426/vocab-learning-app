@@ -14,12 +14,13 @@ const DisplayWords: React.FC<WordDisplayProps> = ({ word }) => {
       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-center break-words">
         {word.word_1_en}
       </h1>
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-center">
-        {word.word_1_ja}
-      </h2>
       <p className="text-lg sm:text-xl md:text-2xl text-gray-600 text-center" aria-label="IPA Pronunciation">
         {word.word_IPA}
       </p>
+      <br />
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium text-center">
+        {word.word_1_ja}
+      </h2>
     </div>
   );
 };
