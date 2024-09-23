@@ -100,14 +100,14 @@ export default function VocabDisplay() {
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 font-sans p-6">
 
-<div className="flex flex-col md:flex-row justify-center items-start h-screen space-y-4 md:space-y-0 md:space-x-6 mb-6 overflow-hidden">
-  <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl h-full flex items-center justify-center">
-    <DisplayWords word={currentWord} />
+  <div className="flex flex-col md:flex-row justify-center items-start h-screen space-y-4 md:space-y-0 md:space-x-6 mb-6 overflow-hidden">
+    <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl h-full flex items-center justify-center">
+      <DisplayWords word={currentWord} />
+    </div>
+    <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl h-full flex items-center justify-center">
+      <DisplayImage imagePath={getImagePath(currentWord.word_image_URL)} />
+    </div>
   </div>
-  <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl h-full flex items-center justify-center">
-    <DisplayImage imagePath={getImagePath(currentWord.word_image_URL)} />
-  </div>
-</div>
 
 
 

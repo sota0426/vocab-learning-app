@@ -1,6 +1,6 @@
 // src/components/SettingsModal.tsx
 import React from 'react';
-import PlaybackSettings from './PlaybackSettings';
+import PlaybackSettings from './AudioPlaybackSettings';
 import AudioTypeSelector from './AudioTypeSelector';
 
 interface SettingsModalProps {
