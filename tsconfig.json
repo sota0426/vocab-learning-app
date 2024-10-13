@@ -3,7 +3,7 @@
     "target": "ES6",                         // 出力のJavaScriptバージョン
     "lib": ["dom", "dom.iterable", "esnext"], // 使用するライブラリ
     "allowJs": true,                         // JSファイルを許可する
-    "skipLibCheck": true,                    // 型チェックをスキップ
+    "skipLibCheck": false,                    // 型チェックをスキップ
     "esModuleInterop": true,                 // ESモジュールとの互換性を保つ
     "allowSyntheticDefaultImports": true,    // デフォルトインポートを許可
     "strict": true,                          // 厳密な型チェック

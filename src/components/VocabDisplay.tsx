@@ -2,26 +2,52 @@ import React, { useState, useEffect } from 'react';
 import vocabData from '../data/vocabData.json';
 import DisplayWords from './DisplayWords';
 import DisplayImage from './DisplayImage';
-import AdditionalInfo from './AdditionalInfo';
+import AdditionalInfo from './DisplayAdditionalInfo';
 import AudioPlayer from './AudioPlayer';
-import NavigationControls from './NavigationControls';
-import SettingsModal from './SettingsModal';
+import NavigationControls from './AudioNavigationControls';
+import SettingsModal from './DisplaySettingsModal';
 import { Settings } from 'lucide-react';
+import AudioSettingsModal from './AudioSettingsModal';
 
 // VocabWordの型定義を明確にする
 interface VocabWord {
+  id: string;
   word_1_en: string;
+  word_2_en: string;
+  word_3_en: string;
   word_1_ja: string;
+  word_2_ja: string;
+  word_3_ja: string;
+  word_class: string;
+  word_structure_A: string;
+  word_structure_B: string;
+  word_alt_en: string;
+  word_alt_ja: string;
   word_IPA: string;
-  word_image_URL: string;
-  word_audio_1_female: string;
-  word_audio_1_male: string;
-  word_class?: string;
-  word_structure_1?: string;
-  word_structure_2?: string;
-  word_alt_en?: string;
-  word_alt_ja?: string;
+  img_URL: string;
+  word_description: string;
+  ENG_female_1: string;
+  ENG_female_2: string;
+  ENG_female_3: string;
+  ENG_male_1: string;
+  ENG_male_2: string;
+  ENG_male_3: string;
+  JPN_female_1: string;
+  JPN_female_2: string;
+  JPN_female_3: string;
+  JPN_male_1: string;
+  JPN_male_2: string;
+  JPN_male_3: string;
 }
+
+interface SelectedItem {
+  id: string;
+  label: string;
+  language: '英語' | '日本語';
+  gender: '男性' | '女性';
+  wordNumber: 1 | 2 | 3;
+}
+
 
 export default function VocabDisplay() {
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
@@ -31,27 +57,45 @@ export default function VocabDisplay() {
   const [audioSequence, setAudioSequence] = useState<string[]>([
     '英語（女性）',
     '英語（男性）',
-    '日本語',
+    '日本語（女性）',
+    '日本語（男性）',
   ]);
   const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showAdditionalInfo, setShowAdditionalInfo] = useState<boolean>(true);
+  const [wordNumber , SetWordNumber] = useState(1);
+  const [isAudioSettingsOpen, setIsAudioSettingsOpen] = useState<boolean>(false);
+  const currentWord = vocabData[currentWordIndex];
+  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([]);
 
-  const currentWord: VocabWord = vocabData[currentWordIndex];
-
-  const getAudioSource = (): string => {
-    const currentAudioType = audioSequence[currentAudioIndex];
-    switch (currentAudioType) {
-      case '英語（女性）':
-        return currentWord.word_audio_1_female;
-      case '英語（男性）':
-        return currentWord.word_audio_1_male;
-      case '日本語':
-        return `/audio/audio_JPN/${currentWordIndex + 1}.mp3`;
-      default:
-        return '';
-    }
+  // オーディオ再生順序の取得
+  const getAudioSequence = () => {
+    return selectedItems.map((item) => item.id);
   };
+  // 現在のオーディオソースを取得
+  const getAudioSource = (): string => {
+    if (currentAudioIndex >= selectedItems.length) {
+      return '';
+    }
+    const item = selectedItems[currentAudioIndex];
+    const audioKey = `${item.language === '英語' ? 'ENG' : 'JPN'}_${
+      item.gender === '女性' ? 'female' : 'male'
+    }_${item.wordNumber}`;
+    return currentWord[audioKey as keyof VocabWord];
+  };
+
+  // 表示する単語を取得
+  const getDisplayWord = (): string => {
+    if (currentAudioIndex >= selectedItems.length) {
+      return '';
+    }
+    const item = selectedItems[currentAudioIndex];
+    const wordKey = `word_${item.wordNumber}_${item.language === '英語' ? 'en' : 'ja'}`;
+    return currentWord[wordKey as keyof VocabWord];
+  };
+  
+  
+
 
     // displayOptions を追加
     const [displayOptions, setDisplayOptions] = useState({
@@ -118,9 +162,9 @@ export default function VocabDisplay() {
       <div className="flex flex-col md:flex-row justify-center items-center h-full space-y-4 md:space-y-0 md:space-x-6 mb-6">
         
       {/* 単語の表示 */}
-      <div className="flex-grow w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl">
+      <div className="flex-grow w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 pt-8 transition-all duration-300 ease-in-out hover:shadow-xl">
         <div className="flex flex-col items-center justify-center">
-          <DisplayWords word={currentWord} />
+          <DisplayWords word={currentWord} number={wordNumber}/>
           
           {/* 追加情報の表示 */}
           {showAdditionalInfo && (
@@ -133,15 +177,16 @@ export default function VocabDisplay() {
 
         {/* 画像の表示 */}
         <div className="flex-grow w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl flex items-center justify-center">
-          <DisplayImage imagePath={getImagePath(currentWord.word_image_URL)} />
+          <DisplayImage imagePath={getImagePath(currentWord.img_URL)} />
         </div>
       </div>
 
 
 
-
-      {/* ナビゲーションとオーディオプレーヤー */}
       <div className="flex flex-col items-center space-y-6">
+      {/* ナビゲーションとオーディオプレーヤー */}
+      {/* 音声プレーヤーの部分 */}
+
         <AudioPlayer
           src={getAudioSource()}
           playbackRate={playbackRate}
@@ -151,29 +196,41 @@ export default function VocabDisplay() {
           onEnded={handleAudioEnded}
         />
 
-        <NavigationControls
-          onPrev={prevWord}
-          onNext={nextWord}
-          isPlaying={isPlaying}
-          onPlayPause={() => setIsPlaying((prev) => !prev)}
-        />
+          <NavigationControls
+            onPrev={prevWord}
+            onNext={nextWord}
+            isPlaying={isPlaying}
+            onPlayPause={() => setIsPlaying((prev) => !prev)}
+          />
 
-        <p className="text-sm text-gray-500">
-          現在の再生順序: {audioSequence.join(' → ') || 'なし'}
-        </p>
+          <p className="text-sm text-gray-500">
+            現在の再生順序: {audioSequence.join(' → ') || 'なし'}
+          </p>
 
-        {/* 設定ボタン */}
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-6 py-3 bg-indigo-600 text-white rounded-full shadow hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center space-x-2"
-        >
-          <Settings className="w-6 h-6" />
-          <span>設定</span>
-        </button>
-      </div>
+          {/* ボタンのグループ */}
+          <div className="flex space-x-4">
+            {/* 設定ボタン */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center space-x-1"
+            >
+              <Settings className="w-5 h-5" />
+              <span>設定</span>
+            </button>
 
-      {/* 設定モーダル */}
-      {isModalOpen && (
+            {/* 音声設定ボタン */}
+            <button
+              onClick={() => setIsAudioSettingsOpen(true)}
+              className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center space-x-1"
+            >
+              <Settings className="w-5 h-5" />
+              <span>音声設定</span>
+            </button>
+          </div>
+
+
+        {/* 設定モーダル */}
+    {isModalOpen && (
         <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-lg p-6 w-full max-w-md">
             <h2 className="text-lg font-semibold text-gray-700 mb-4">設定</h2>
@@ -184,8 +241,7 @@ export default function VocabDisplay() {
               setPlaybackRate={setPlaybackRate}
               nextWordDelay={nextWordDelay}
               setNextWordDelay={setNextWordDelay}
-              audioSequence={audioSequence}
-              toggleAudioType={toggleAudioType}
+
               showAdditionalInfo={showAdditionalInfo}
               setShowAdditionalInfo={setShowAdditionalInfo}
               displayOptions={displayOptions}           // 追加
@@ -199,7 +255,21 @@ export default function VocabDisplay() {
             </button>
           </div>
         </div>
-      )}
+        )}
+
+        {/* 音声設定モーダル */}
+        {isAudioSettingsOpen && (
+          <AudioSettingsModal
+            isOpen={isAudioSettingsOpen}
+            onClose={() => setIsAudioSettingsOpen(false)}
+            // 必要なプロップスを渡す
+            selectedItems={selectedItems}
+            setSelectedItems={setSelectedItems}
+          />
+        )}
+
+      </div>
+
     </div>
   );
 }

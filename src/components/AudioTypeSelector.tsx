@@ -10,7 +10,7 @@ const AudioTypeSelector: React.FC<AudioTypeSelectorProps> = ({
   audioSequence,
   toggleAudioType,
 }) => {
-  const audioTypes = ['英語（女性）', '英語（男性）', '日本語'];
+  const audioTypes = ['英語（女性）', '英語（男性）', '日本語（女性）', '日本語（男性）',];
 
   return (
     <div className="mt-4">

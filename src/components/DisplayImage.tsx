@@ -1,3 +1,4 @@
+//src\components\DisplayImage.tsx
 import React from 'react';
 
 interface WordDisplayProps {
@@ -6,7 +7,7 @@ interface WordDisplayProps {
 
 const DisplayImage: React.FC<WordDisplayProps> = ({ imagePath}) => {
   return (
-      <div className="w-1/2 relative">
+      <div className="w-2/3 relative">
         <img
           src={imagePath}
           alt=""
