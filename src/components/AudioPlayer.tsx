@@ -31,6 +31,10 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
     }
   }, [isPlaying, playbackRate, src]);
 
+  const handleEnded=()=>{
+    onEnded();
+  }
+
   return (
     <div className="flex space-x-2 items-center">
       <audio
