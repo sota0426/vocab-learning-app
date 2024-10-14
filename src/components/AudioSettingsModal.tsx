@@ -88,7 +88,7 @@ const AudioSettingsModal: React.FC<AudioSettingsModalProps> = ({
         {/* 左側: 選択された項目のリストと並び替え */}
         <div className="w-1/2 pr-4 border-r overflow-y-auto max-h-screen">
           <h1 className="text-lg font-semibold mb-4">選択編集</h1>
-          <p className="text-sm  text-left mb-4">※ドラッグ＆ドロップで並び替えができますい。</p>
+          <p className="text-sm  text-left mb-4">※ドラッグ＆ドロップで並び替えができます。</p>
 
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="selectedItems">
