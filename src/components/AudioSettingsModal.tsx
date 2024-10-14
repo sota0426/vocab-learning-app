@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+// src/components/AudioSettingsModal.tsx
+
+import React from 'react';
+import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
+import { SelectedItem } from '../types'; // パスはプロジェクト構成に応じて調整してください
 
 interface AudioSettingsModalProps {
   isOpen: boolean;
@@ -8,18 +11,6 @@ interface AudioSettingsModalProps {
   setSelectedItems: (items: SelectedItem[]) => void;
 }
 
-interface SelectedItem {
-  id: string;
-  label: string;
-  language: '英語' | '日本語';
-  gender: '男性' | '女性';
-  wordNumber: 1 | 2 | 3;
-}
-const words = [
-  'create',
-  'create a masterpiece.',
-  'He creates a breathtaking masterpiece.',
-];
 
 const AudioSettingsModal: React.FC<AudioSettingsModalProps> = ({
   isOpen,
@@ -27,31 +18,21 @@ const AudioSettingsModal: React.FC<AudioSettingsModalProps> = ({
   selectedItems,
   setSelectedItems,
 }) => {
-  const [newItem, setNewItem] = useState<SelectedItem>({
-    id: '',
-    label: '',
-    language: '英語',
-    gender: '男性',
-    wordNumber: 1,
-  });
-
-  // newItemが変更されたときにアイテムを追加する
-  useEffect(() => {
-    if (newItem.id) {
-      handleAddItem(newItem);
-    }
-  }, [newItem]);
-
+  // 新しい項目を追加する関数
   const handleAddItem = (item: SelectedItem) => {
-    const id = `${item.language}_${item.gender}_${item.wordNumber}`;
-    setSelectedItems([...selectedItems, { ...item, id }]);
+    const exists = selectedItems.some((i) => i.id === item.id);
+    if (!exists) {
+      setSelectedItems([...selectedItems, item]);
+    }
   };
 
+  // 項目を削除する関数
   const handleRemoveItem = (id: string) => {
     setSelectedItems(selectedItems.filter((item) => item.id !== id));
   };
 
-  const handleDragEnd = (result: any) => {
+  // ドラッグ＆ドロップの終了ハンドラ
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const items = Array.from(selectedItems);
     const [reorderedItem] = items.splice(result.source.index, 1);
@@ -59,6 +40,7 @@ const AudioSettingsModal: React.FC<AudioSettingsModalProps> = ({
     setSelectedItems(items);
   };
 
+  // 性別を切り替える関数
   const toggleGender = (id: string) => {
     setSelectedItems(
       selectedItems.map((item) =>
@@ -69,16 +51,45 @@ const AudioSettingsModal: React.FC<AudioSettingsModalProps> = ({
     );
   };
 
+
+
+
+  // 言語の表示状態を切り替える関数（各単語ごと）
+  const toggleLanguageEnabled = (id: string, language: '日本語' | '英語') => {
+    setSelectedItems(
+      selectedItems.map((item) => {
+        if (item.id === id) {
+          if (language === '日本語') {
+            return {
+              ...item,
+              showJapaneseSentence: !item.showJapaneseSentence,
+            };
+          } else {
+            return {
+              ...item,
+              showEnglishSentence: !item.showEnglishSentence,
+            };
+          }
+        }
+        return item;
+      })
+    );
+  };
+
+
+
+  if (!isOpen) return null;
+
   return (
     <div
-      className={`${
-        isOpen ? 'block' : 'hidden'
-      } fixed inset-0 z-50 flex justify-center items-center bg-gray-800 bg-opacity-50`}
+      className={`fixed inset-0 z-50 flex justify-center items-center bg-gray-800 bg-opacity-50`}
     >
       <div className="bg-white rounded-lg p-6 w-full max-w-4xl flex">
         {/* 左側: 選択された項目のリストと並び替え */}
-        <div className="w-1/2 pr-4 border-r">
+        <div className="w-1/2 pr-4 border-r overflow-y-auto max-h-screen">
           <h1 className="text-lg font-semibold mb-4">選択編集</h1>
+          <p className="text-sm  text-left mb-4">※ドラッグ＆ドロップで並び替えができますい。</p>
+
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="selectedItems">
               {(provided) => (
@@ -91,28 +102,64 @@ const AudioSettingsModal: React.FC<AudioSettingsModalProps> = ({
                     <Draggable key={item.id} draggableId={item.id} index={index}>
                       {(provided) => (
                         <li
-                          className="flex justify-between items-center mb-2 p-2 bg-gray-100 rounded"
+                          className="flex flex-col justify-between items-start mb-2 p-2 bg-gray-100 rounded"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                         >
-                          <span>
-                            {item.language} ({item.gender}) - ワード{item.wordNumber}
-                          </span>
-                          <div className="flex items-center space-x-2">
-                            <button
-                              onClick={() => toggleGender(item.id)}
-                              className="px-2 py-1 bg-green-500 text-white rounded"
-                            >
-                              男女
-                            </button>
-                            <button
-                              onClick={() => handleRemoveItem(item.id)}
-                              className="px-2 py-1 bg-red-500 text-white rounded"
-                            >
-                              削除
-                            </button>
+                          <div className="w-full flex justify-between items-center">
+                            <span>
+                              
+                             {index + 1}．{item.wordNumber === 1 ? '①単語' : item.wordNumber === 2 ? '②チャンク' : '③文章'}： {item.language} 音声  ({item.gender})
+                            </span>
+                            <div className="flex items-center space-x-2">
+                              <button
+                                onClick={() => handleRemoveItem(item.id)}
+                                className="px-2 py-1 bg-black text-white rounded"
+                              >
+                                削除
+                              </button>
+                            </div>
                           </div>
+
+                          {/* 言語の表示状態を切り替えるボタン */}
+                          <div className="flex space-x-2 mt-2">
+
+                            {/* 英語の表示状態切替ボタン */}
+                            <button
+                              onClick={() => toggleLanguageEnabled(item.id, '英語')}
+                              className={`px-3 py-1 border rounded ${
+                                item.showEnglishSentence
+                                  ? 'bg-blue-500 text-white'
+                                  : 'bg-gray-300 text-black'
+                              }`}
+                            >
+                              英 {item.showEnglishSentence ? 'あり' : 'なし'}
+                            </button>
+
+                            {/* 日本語の表示状態切替ボタン */}
+                            <button
+                              onClick={() => toggleLanguageEnabled(item.id, '日本語')}
+                              className={`px-3 py-1 border rounded ${
+                                item.showJapaneseSentence
+                                  ? 'bg-blue-500 text-white'
+                                  : 'bg-gray-300 text-black'
+                              }`}
+                            >
+                              日{item.showJapaneseSentence ? 'あり' : 'なし'}
+                            </button>
+
+                            <button
+                                onClick={() => toggleGender(item.id)}
+                                className={`px-2 py-1 rounded ${
+                                  item.gender === '男性' ? 'bg-green-500' : 'bg-pink-500'
+                                } text-white`}
+                                aria-label={item.gender === '男性' ? '男性に変更' : '女性に変更'}
+                                >
+                                  音声（{item.gender}）
+                                </button>
+                          </div>
+
                         </li>
                       )}
                     </Draggable>
@@ -125,52 +172,68 @@ const AudioSettingsModal: React.FC<AudioSettingsModalProps> = ({
         </div>
 
         {/* 右側: ワードと音声選択のボタン形式 */}
-        <div className="w-1/2 pl-4">
+        <div className="w-1/2 pl-4 overflow-y-auto max-h-screen">
           <h1 className="text-lg font-semibold mb-4">ワード・音声選択</h1>
           {[1, 2, 3].map((wordNumber) => (
             <div key={wordNumber} className="mb-4">
-              <h2 className="mb-2">ワード{wordNumber}: {words[wordNumber - 1]}</h2>
+              {wordNumber === 1 ? <h2 className="mb-2 text-left">①単語（例: create）</h2> : null}
+              {wordNumber === 2 ? <h2 className="mb-2 text-left">②チャンク（例: create a masterpiece）</h2> : null}
+              {wordNumber === 3 ? <h2 className="mb-2 text-left">③文章（例: He creates a breathtaking masterpiece.）</h2> : null}
               <div className="flex space-x-4">
                 {/* 英語ボタン */}
                 <button
-                  className={`px-4 py-2 border text-sm ${
-                    newItem.wordNumber === wordNumber &&
-                    newItem.language === '英語'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white text-black'
-                  } rounded`}
+                  className={`px-4 py-2 border text-sm bg-white text-black rounded ${
+                    false ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                   onClick={() => {
-                    setNewItem({
-                      wordNumber: wordNumber as 1 | 2 | 3,
-                      language: '英語',
-                      gender: '男性', // デフォルトで男性を設定
-                      id: `${'英語'}_${'男性'}_${wordNumber}`,
-                      label: '',
-                    });
+                    // 英語追加ロジック
+                    const newId = `英語_${'男性'}_${wordNumber}`;
+                    const itemExists = selectedItems.some((item) => item.id === newId);
+                    if (!itemExists) {
+                      const item: SelectedItem = {
+                        wordNumber: wordNumber as 1 | 2 | 3,
+                        language: '英語',
+                        gender: '男性', // デフォルトで男性を設定
+                        id: newId,
+                        label: '',
+                        japaneseSentence: '',
+                        englishSentence: '',
+                        showJapaneseSentence: false, 
+                        showEnglishSentence: true,  
+                      };
+                      handleAddItem(item);
+                    }
                   }}
                 >
-                  英語
+                  英語音声
                 </button>
 
                 {/* 日本語ボタン */}
                 <button
-                  className={`px-4 py-2 border text-sm ${
-                    newItem.wordNumber === wordNumber &&
-                    newItem.language === '日本語'
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-white text-black'
-                  } rounded`}
+                  className={`px-4 py-2 border text-sm bg-white text-black rounded ${
+                    false ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                   onClick={() => {
-                    setNewItem({
-                      wordNumber: wordNumber as 1 | 2 | 3,
-                      language: '日本語',
-                      gender: '男性', // デフォルトで男性を設定
-                      id: `${'日本語'}_${'男性'}_${wordNumber}`,
-                      label: '',
-                    });
+                    // 日本語追加ロジック
+                    const newId = `日本語_${'男性'}_${wordNumber}`;
+                    const itemExists = selectedItems.some((item) => item.id === newId);
+                    if (!itemExists) {
+                      const item: SelectedItem = {
+                        wordNumber: wordNumber as 1 | 2 | 3,
+                        language: '日本語',
+                        gender: '男性', // デフォルトで男性を設定
+                        id: newId,
+                        label: '',
+                        japaneseSentence: '',
+                        englishSentence: '',
+                        showJapaneseSentence: true, 
+                        showEnglishSentence: true,  
+                      };
+                      handleAddItem(item);
+                    }
                   }}
                 >
-                  日本語
+                  日本語音声
                 </button>
               </div>
             </div>

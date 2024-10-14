@@ -7,7 +7,7 @@ interface WordDisplayProps {
 
 const DisplayImage: React.FC<WordDisplayProps> = ({ imagePath}) => {
   return (
-      <div className="w-2/3 relative">
+      <div className="w-full relative">
         <img
           src={imagePath}
           alt=""
