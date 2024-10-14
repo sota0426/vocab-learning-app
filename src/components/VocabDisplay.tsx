@@ -8,7 +8,6 @@ import AudioPlayer from './AudioPlayer';
 import NavigationControls from './AudioNavigationControls';
 import SettingsModal from './DisplaySettingsModal';
 import { Settings } from 'lucide-react';
-import AudioSettingsModal from './AudioSettingsModal';
 import { VocabWord, SelectedItem } from '../types';
 
 export default function VocabDisplay() {
@@ -17,9 +16,7 @@ export default function VocabDisplay() {
   const [isPlaying, setIsPlaying] = useState<boolean>(false); // 音声再生の状態
   const [playbackRate, setPlaybackRate] = useState<number>(1); // 再生速度
   const [nextWordDelay, setNextWordDelay] = useState<number>(1); // 次の単語までの遅延時間
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 設定モーダル
-  const [isAudioSettingsOpen, setIsAudioSettingsOpen] = useState<boolean>(false); // 音声設定モーダル
   const currentWordData: VocabWord = vocabData[currentWordIndex];
 
   // 選択された項目の初期状態
@@ -27,6 +24,7 @@ export default function VocabDisplay() {
     {
       id: '英語_男性_1',
       label: '',
+      wordType: '①単語',
       language: '英語',
       gender: '男性',
       wordNumber: 1,
@@ -38,6 +36,7 @@ export default function VocabDisplay() {
     {
       id: '日本語_男性_1',
       label: '',
+      wordType: '①単語',
       language: '日本語',
       gender: '男性',
       wordNumber: 1,
@@ -112,18 +111,20 @@ export default function VocabDisplay() {
 
   // 次の単語に進む関数
   const nextWord = () => {
+    setCurrentAudioIndex(0);
     setCurrentWordIndex((prevIndex) =>
       prevIndex < vocabData.length - 1 ? prevIndex + 1 : 0
     );
-    setCurrentAudioIndex(0);
+
   };
 
   // 前の単語に戻る関数
   const prevWord = () => {
+    setCurrentAudioIndex(0);
     setCurrentWordIndex((prevIndex) =>
       prevIndex > 0 ? prevIndex - 1 : vocabData.length - 1
     );
-    setCurrentAudioIndex(0);
+
   };
 
   // オーディオ再生が終了したときのハンドラ
@@ -144,7 +145,7 @@ export default function VocabDisplay() {
   useEffect(() => {
     if (isPlaying) {
     }
-  }, [currentWordIndex, currentAudioIndex, isPlaying,isAudioSettingsOpen]);
+  }, [currentWordIndex, currentAudioIndex, isPlaying]);
 
   // デバッグ用: selectedItems と currentAudioIndex をログ出力
   useEffect(() => {
@@ -176,7 +177,7 @@ export default function VocabDisplay() {
       <div className="flex flex-col md:flex-row justify-center items-center h-full space-y-4 md:space-y-0 md:space-x-6 mb-6">
         
         {/* 単語の表示 */}
-        <div className="flex-grow w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 pt-8 transition-all duration-300 ease-in-out hover:shadow-xl">
+        <div className="flex-grow w-full md:w-8/12 bg-white shadow-lg rounded-lg p-8 pt-8 transition-all duration-300 ease-in-out hover:shadow-xl">
           <div className="flex flex-col items-center justify-center">
             {/* DisplayWords コンポーネントに currentWord と wordNumber を渡す */}
             <DisplayWords 
@@ -187,6 +188,22 @@ export default function VocabDisplay() {
               displayOptions={displayOptions}
             />
           </div>
+        <div className="flex items-center justify-center mt-4">
+          1
+          <input
+            type="range"
+            id="wordNumberScroll"
+            min="0"
+            max={vocabData.length-1}
+            value={currentWordIndex}
+            onChange={(e) => {
+              setCurrentWordIndex(parseInt(e.target.value));
+              setCurrentAudioIndex(0);
+            }}
+            className="w-10/12"
+          />
+          {vocabData.length}
+        </div>
         </div>
 
         {/* 画像の表示 */}
@@ -195,15 +212,15 @@ export default function VocabDisplay() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center space-y-6">
-        {/* ナビゲーションとオーディオプレーヤー */}
-        {/* 音声プレーヤーの部分 */}
+      <div className="flex items-center justify-center space-x-6"> {/* flex-row で横並びにする */}
         <AudioPlayer
           src={getAudioSource()}
           playbackRate={playbackRate}
           isPlaying={isPlaying}
           onPlay={() => setIsPlaying(true)}
-          onStop={() => setIsPlaying(false)}
+          onStop={() => {
+            setCurrentAudioIndex(0);
+            setIsPlaying(false)}}
           onEnded={handleAudioEnded}
         />
 
@@ -214,32 +231,23 @@ export default function VocabDisplay() {
           onPlayPause={() => setIsPlaying((prev) => !prev)}
         />
 
-        <p className="text-sm text-gray-500">
-          現在の再生順序: {selectedItems.map(item => item.id).join(' → ') || 'なし'}
-        </p>
-
-        {/* ボタンのグループ */}
-        <div className="flex space-x-4">
-          {/* 設定ボタン */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center space-x-1"
-          >
-            <Settings className="w-5 h-5" />
-            <span>設定</span>
-          </button>
-
-          {/* 音声設定ボタン */}
-          <button
-            onClick={() => setIsAudioSettingsOpen(true)}
-            className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center space-x-1"
-          >
-            <Settings className="w-5 h-5" />
-            <span>音声設定</span>
-          </button>
+        {/* 設定ボタン */}
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="px-4 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center space-x-1"
+        >
+          <Settings className="w-5 h-5" />
+          <span>設定</span>
+        </button>
         </div>
 
+        <p className="text-sm pt-2 text-gray-500">
+          現在の再生順序: {selectedItems.map(item => item.id).join(' → ') || 'なし'}
+        </p>
+ 
+
         {/* 設定モーダル */}
+
         {isModalOpen && (
           <SettingsModal
             isOpen={isModalOpen}
@@ -250,19 +258,11 @@ export default function VocabDisplay() {
             setNextWordDelay={setNextWordDelay}
             displayOptions={displayOptions}
             setDisplayOptions={setDisplayOptions}
-          />
-        )}
-
-        {/* 音声設定モーダル */}
-        {isAudioSettingsOpen && (
-          <AudioSettingsModal
-            isOpen={isAudioSettingsOpen}
-            onClose={() => setIsAudioSettingsOpen(false)}
             selectedItems={selectedItems}
             setSelectedItems={setSelectedItems}
           />
         )}
+
       </div>
-    </div>
   );
 }

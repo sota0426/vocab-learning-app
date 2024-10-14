@@ -15,10 +15,10 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
   onPlayPause,
 }) => {
   return (
-    <div className="flex space-x-2">
+    <span className="flex space-x-2">
       <button
         onClick={onPrev}
-        className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+        className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 "
       >
         前に戻る
       </button>
@@ -38,7 +38,7 @@ const NavigationControls: React.FC<NavigationControlsProps> = ({
       >
         次に進む
       </button>
-    </div>
+    </span>
   );
 };
 

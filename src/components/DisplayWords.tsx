@@ -38,7 +38,7 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
   };
 
   // Calculate font scale based on the 'number' prop
-  const fontScale = number === 1 ? 1 : number === 2 ? 0.8 : 0.6;
+  const fontScale = number === 1 ? 1 : number === 2 ? 0.9 : 0.8;
 
   // Calculate the dynamic font size using the scale
   const dynamicFontSize = `clamp(${2 * fontScale}rem, ${5 * fontScale}vw, ${4 * fontScale}rem)`;
@@ -94,7 +94,7 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
           {renderOrPlaceholder(
             displayOptions.showWordStructure,
             <p className="pb-2 text-gray-700">
-              【単語の構造】 {word.word_structure_A}, {word.word_structure_B}
+              【単語の成り立ち】 {word.word_structure_A}, {word.word_structure_B}
             </p>,
             'h-6 pb-2'
           )}

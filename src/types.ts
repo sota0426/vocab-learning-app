@@ -34,6 +34,7 @@ export interface VocabWord {
   export interface SelectedItem {
     id: string;
     label: string;
+    wordType: '①単語' | '②フレーズ' | '③文章';
     language: '英語' | '日本語';
     gender: '男性' | '女性';
     wordNumber: 1 | 2 | 3;
