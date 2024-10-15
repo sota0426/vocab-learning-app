@@ -58,7 +58,7 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
         )}
 
         {renderOrPlaceholder(
-          displayOptions.showWordPronunciation && number === 1,
+          displayOptions.showWordPronunciation && showEnglish && number === 1,
           <p className="mb-2" style={{ fontSize: `clamp(1rem, 2.5vw, 1.2rem)` }}>
             {word.word_IPA}
           </p>,
@@ -80,7 +80,6 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
             <p className="pb-2 text-gray-700">
               【単語】 {word.word_class}
             </p>,
-            'h-6 pb-2'
           )}
 
           {renderOrPlaceholder(
@@ -88,7 +87,6 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
             <p className="pb-2 text-gray-700">
               【単語の説明】 {word.word_description}
             </p>,
-            'h-6 pb-2'
           )}
 
           {renderOrPlaceholder(
@@ -96,7 +94,6 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
             <p className="pb-2 text-gray-700">
               【単語の成り立ち】 {word.word_structure_A}, {word.word_structure_B}
             </p>,
-            'h-6 pb-2'
           )}
 
           {renderOrPlaceholder(
@@ -104,7 +101,6 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
             <p className="text-gray-700">
               【類似単語】 {word.word_alt_en} / {word.word_alt_ja}
             </p>,
-            'h-6'
           )}
         </div>
       </div>

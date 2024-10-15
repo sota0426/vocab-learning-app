@@ -22,26 +22,22 @@ export default function VocabDisplay() {
   // 選択された項目の初期状態
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([
     {
-      id: '英語_男性_1',
-      label: '',
+      id: '1',
+      label: '英語_男性_1',
       wordType: '①単語',
-      language: '英語',
+      speakLanguage: '英語',
       gender: '男性',
       wordNumber: 1,
-      japaneseSentence: '',
-      englishSentence: '',
       showJapaneseSentence: false,
       showEnglishSentence: true,
     },
     {
-      id: '日本語_男性_1',
-      label: '',
+      id: '2',
+      label: '日本語_男性_1',
       wordType: '①単語',
-      language: '日本語',
+      speakLanguage: '日本語',
       gender: '男性',
       wordNumber: 1,
-      japaneseSentence: '',
-      englishSentence: '',
       showJapaneseSentence: true,
       showEnglishSentence: false,
     },
@@ -54,36 +50,20 @@ export default function VocabDisplay() {
       return '';
     }
 
-    // 現在のオーディオインデックスに対応する選択項目を取得
     const item = selectedItems[currentAudioIndex];
-
-    // 言語、性別、単語番号に基づいてオーディオキーを生成
-    const audioKey = `${item.language === '英語' ? 'ENG' : 'JPN'}_${
+    const audioKey = `${item.speakLanguage === '英語' ? 'ENG' : 'JPN'}_${
       item.gender === '女性' ? 'female' : 'male'
     }_${item.wordNumber}`;
-
-    // 生成したオーディオキーを使用して、現在の単語データからオーディオパスを取得
     let audioPath = currentWordData[audioKey as keyof VocabWord] as string;
-
-    // オーディオパスが存在しない場合、警告をコンソールに表示して空文字を返す
     if (!audioPath) {
       console.warn(`Audio file not found for key: ${audioKey}`);
       return '';
     }
-
-    // パス内のバックスラッシュをスラッシュに置き換える（URL形式に適合させるため）
     audioPath = audioPath.replace(/\\/g, '/');
-
-    // パスの先頭に 'public/' が含まれている場合、それを削除
-    // React の場合、public フォルダ内のファイルはルートからアクセス可能なため
     if (audioPath.startsWith('public/')) {
       audioPath = audioPath.replace('public/', '/');
     }
-
-    // 調整後のオーディオパスをコンソールにログ出力（デバッグ用）
     console.log('Adjusted Audio Path:', audioPath);
-
-    // 調整済みのオーディオパスを返す
     return audioPath;
   };
 
@@ -128,24 +108,23 @@ export default function VocabDisplay() {
   };
 
   // オーディオ再生が終了したときのハンドラ
+
   const handleAudioEnded = () => {
-    setTimeout(() => {
-      if (currentAudioIndex < selectedItems.length - 1) {
-        setCurrentAudioIndex((prevIndex) => prevIndex + 1);
-        setIsPlaying(true);
-      } else {
-        setCurrentAudioIndex(0);
-        nextWord(); // 自動的に次の単語に進む
-        setIsPlaying(true); // 次の単語を再生
-      }
-    }, nextWordDelay * 1000);
+    // 再生状態が true の場合のみ次の音声を再生する
+    if (isPlaying) {
+      setTimeout(() => {
+        if (currentAudioIndex < selectedItems.length - 1) {
+          setCurrentAudioIndex((prevIndex) => prevIndex + 1);
+          setIsPlaying(true);
+        } else {
+          setCurrentAudioIndex(0);
+          nextWord(); // 自動的に次の単語に進む
+          setIsPlaying(true); // 次の単語を再生
+        }
+      }, nextWordDelay * 1000);
+    }
   };
 
-  // オーディオ再生の開始（プレースホルダ）
-  useEffect(() => {
-    if (isPlaying) {
-    }
-  }, [currentWordIndex, currentAudioIndex, isPlaying]);
 
   // デバッグ用: selectedItems と currentAudioIndex をログ出力
   useEffect(() => {
@@ -156,20 +135,6 @@ export default function VocabDisplay() {
   // 現在の単語番号
   const currentWordNumber = selectedItems[currentAudioIndex]?.wordNumber || 1;
 
-  // 現在の単語番号に基づいて、英語と日本語の表示フラグを取得
-  const showEnglish = selectedItems.some(
-    (item) =>
-      item.wordNumber === currentWordNumber &&
-      item.language === '英語' &&
-      item.showEnglishSentence
-  );
-
-  const showJapanese = selectedItems.some(
-    (item) =>
-      item.wordNumber === currentWordNumber &&
-      item.language === '日本語' &&
-      item.showJapaneseSentence
-  );
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-blue-50 to-blue-100 font-sans p-6">
@@ -183,8 +148,8 @@ export default function VocabDisplay() {
             <DisplayWords 
               word={getDisplayWord()} 
               number={currentWordNumber} 
-              showEnglish={showEnglish}
-              showJapanese={showJapanese}
+              showEnglish={selectedItems[currentAudioIndex].showEnglishSentence}
+              showJapanese={selectedItems[currentAudioIndex].showJapaneseSentence}
               displayOptions={displayOptions}
             />
           </div>
@@ -214,6 +179,7 @@ export default function VocabDisplay() {
 
       <div className="flex items-center justify-center space-x-6"> {/* flex-row で横並びにする */}
         <AudioPlayer
+          key={currentAudioIndex} 
           src={getAudioSource()}
           playbackRate={playbackRate}
           isPlaying={isPlaying}
@@ -242,7 +208,7 @@ export default function VocabDisplay() {
         </div>
 
         <p className="text-sm pt-2 text-gray-500">
-          現在の再生順序: {selectedItems.map(item => item.id).join(' → ') || 'なし'}
+          現在の再生順序: {selectedItems.map(item => item.label).join(' → ') || 'なし'}
         </p>
  
 

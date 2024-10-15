@@ -35,11 +35,9 @@ export interface VocabWord {
     id: string;
     label: string;
     wordType: '①単語' | '②フレーズ' | '③文章';
-    language: '英語' | '日本語';
+    speakLanguage: '英語' | '日本語';
     gender: '男性' | '女性';
     wordNumber: 1 | 2 | 3;
-    japaneseSentence: string;
-    englishSentence: string;
     showJapaneseSentence: boolean; // 日本語文章の表示状態
     showEnglishSentence: boolean;  // 英語文章の表示状態
   }

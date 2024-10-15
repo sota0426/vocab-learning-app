@@ -52,7 +52,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     <div
       className="fixed inset-0 z-50 flex justify-center items-center bg-gray-800 bg-opacity-50"
     >
-      <div className="bg-white rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg p-6 max-h-[90vh] overflow-y-auto">
         <h1 className="text-lg font-semibold mb-4">設定</h1>
 
         {/* タブ */}

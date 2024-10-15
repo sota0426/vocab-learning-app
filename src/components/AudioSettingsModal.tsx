@@ -14,10 +14,6 @@ const AudioSettings: React.FC<AudioSettingsProps> = ({
   selectedItems,
   setSelectedItems,
 }) => {
-  // 新しい項目を追加する関数
-  const handleAddItem = (item: SelectedItem) => {
-    setSelectedItems([...selectedItems, item]);
-  };
 
   // 項目を削除する関数
   const handleRemoveItem = (id: string) => {
@@ -44,44 +40,56 @@ const AudioSettings: React.FC<AudioSettingsProps> = ({
     );
   };
 
-  // 言語の表示状態を切り替える関数（各単語ごと）
-  const toggleLanguageEnabled = (id: string, language: '日本語' | '英語') => {
+  // 言語の表示状態を切り替える関数（1つのボタンで4つの状態を切り替え）
+  const toggleLanguageEnabled = (id: string) => {
     setSelectedItems(
       selectedItems.map((item) => {
         if (item.id === id) {
-          if (language === '日本語') {
-            return {
-              ...item,
-              showJapaneseSentence: !item.showJapaneseSentence,
+          let nextState = {
+            showJapaneseSentence: false,
+            showEnglishSentence: false,
+          };
+
+          if (item.showJapaneseSentence && item.showEnglishSentence) {
+            // 両方表示中 -> 英語のみ
+            nextState = {
+              showJapaneseSentence: false,
+              showEnglishSentence: true,
+            };
+          } else if (item.showEnglishSentence) {
+            // 英語のみ -> 日本語のみ
+            nextState = {
+              showJapaneseSentence: true,
+              showEnglishSentence: false,
+            };
+          } else if (item.showJapaneseSentence) {
+            // 日本語のみ -> 両方表示なし
+            nextState = {
+              showJapaneseSentence: false,
+              showEnglishSentence: false,
             };
           } else {
-            return {
-              ...item,
-              showEnglishSentence: !item.showEnglishSentence,
+            // 両方非表示 -> 両方表示
+            nextState = {
+              showJapaneseSentence: true,
+              showEnglishSentence: true,
             };
           }
-        }
-        return item;
-      })
-    );
-  };
-
-  // 単語タイプを切り替える関数
-  const toggleWordType = (id: string) => {
-    setSelectedItems(
-      selectedItems.map((item) => {
-        if (item.id === id) {
-          const currentIndex = wordTypes.indexOf(item.wordType);
-          const nextIndex = (currentIndex + 1) % wordTypes.length;
+          console.log('Updated Item:', {
+            ...item,
+            ...nextState,
+          });  // ここで確認
+          
           return {
             ...item,
-            wordType: wordTypes[nextIndex] as '①単語' | '②フレーズ' | '③文章',
+            ...nextState,
           };
         }
         return item;
       })
     );
   };
+
 
   return (
     <div className="flex flex-col space-y-4">
@@ -108,7 +116,7 @@ const AudioSettings: React.FC<AudioSettingsProps> = ({
                       >
                         <div className="w-full flex justify-between items-center">
                           <span>
-                            {index + 1}．{item.wordType}： {item.language} 音声  ({item.gender})
+                            {index + 1}．{item.wordType}（{item.speakLanguage}）__ {item.gender}音声 
                           </span>
                           <div className="flex items-center space-x-2">
 
@@ -117,36 +125,26 @@ const AudioSettings: React.FC<AudioSettingsProps> = ({
 
                         {/* 言語の表示状態を切り替えるボタン */}
                         <div className="flex space-x-4 mt-2">
-                          {/* 英語の表示状態切替ボタン */}
-                              {/* 単語タイプ切り替えボタン */}
-                              <button
-                            onClick={() => toggleWordType(item.id)}
-                            className="px-2 py-1 border rounded bg-gray-300 text-black"
-                          >
-                            {item.wordType}
-                          </button>
-                          
+                          {/* 英語・日本語表示切替ボタン */}
                           <button
-                            onClick={() => toggleLanguageEnabled(item.id, '英語')}
+                            onClick={() => toggleLanguageEnabled(item.id)}
                             className={`px-3 py-1 border rounded ${
-                              item.showEnglishSentence
-                                ? 'bg-blue-500 text-white'
+                              item.showJapaneseSentence && item.showEnglishSentence
+                                ? 'bg-blue-400 text-white'
+                                : item.showEnglishSentence
+                                ? 'bg-blue-600 text-white'
+                                : item.showJapaneseSentence
+                                ? 'bg-blue-900 text-white'
                                 : 'bg-gray-300 text-black'
                             }`}
                           >
-                            英 {item.showEnglishSentence ? 'あり' : 'なし'}
-                          </button>
-
-                          {/* 日本語の表示状態切替ボタン */}
-                          <button
-                            onClick={() => toggleLanguageEnabled(item.id, '日本語')}
-                            className={`px-3 py-1 border rounded ${
-                              item.showJapaneseSentence
-                                ? 'bg-blue-500 text-white'
-                                : 'bg-gray-300 text-black'
-                            }`}
-                          >
-                            日{item.showJapaneseSentence ? 'あり' : 'なし'}
+                            {item.showJapaneseSentence && item.showEnglishSentence
+                              ? '日英あり'
+                              : item.showEnglishSentence
+                              ? ' 英のみ '
+                              : item.showJapaneseSentence
+                              ? ' 日のみ '
+                              : '  なし  '}
                           </button>
 
                           {/* 性別切り替えボタン */}
@@ -159,6 +157,7 @@ const AudioSettings: React.FC<AudioSettingsProps> = ({
                           >
                             {item.gender}音声
                           </button>
+
                           <button
                               onClick={() => handleRemoveItem(item.id)}
                               className="px-2 py-1 rounded-full bg-black text-white"
@@ -180,30 +179,48 @@ const AudioSettings: React.FC<AudioSettingsProps> = ({
       {/* 右側: ワードと音声選択のボタン形式 */}
       <div className="flex flex-row space-x-2">
         <h1 className="text-lg font-semibold mb-4">音声追加</h1>
-        {[1,2,3].map((wordNumber) => (
-          <div key={wordNumber} className="mb-4 flex flex-">
-              <button
-                className="px-4 py-2 border text-sm bg-white text-black rounded"
-                onClick={() => {
-                  const newId = `英語_男性_${wordNumber}`;
-                    const item: SelectedItem = {
-                      wordNumber: wordNumber as 1 | 2 | 3,
-                      language: '英語',
-                      gender: '男性',
-                      id: newId,
-                      label: '',
-                      japaneseSentence: '',
-                      englishSentence: '',
-                      showJapaneseSentence: false,
-                      showEnglishSentence: true,
-                      wordType: wordTypes[wordNumber - 1] as '①単語' | '②フレーズ' | '③文章', // デフォルトの単語タイプ
-                    };
-                    setSelectedItems([...selectedItems, item]);
-                  }
-                }
-              >
-                {wordTypes[wordNumber - 1]} 
-              </button>
+        {[1, 2, 3].map((wordNumber) => (
+          <div key={wordNumber} className="mb-4 flex flex-col">
+            <button
+              className="px-4 py-2 border text-sm bg-white text-black rounded"
+              onClick={() => {
+                const newId = new Date().getTime();
+                const labelEng = `英語_男性_${wordNumber}`;
+                const itemEng: SelectedItem = {
+                  wordNumber: wordNumber as 1 | 2 | 3,
+                  speakLanguage: '英語',
+                  gender: '男性',
+                  id: newId.toString(),
+                  label: labelEng,
+                  showJapaneseSentence: true,
+                  showEnglishSentence: true,
+                  wordType: wordTypes[wordNumber - 1] as '①単語' | '②フレーズ' | '③文章',
+                };
+                setSelectedItems([...selectedItems, itemEng]);
+              }}
+            >
+              {wordTypes[wordNumber - 1]}（英語）
+            </button>
+            <button
+              className="px-4 py-2 border text-sm bg-white text-black rounded mt-2"
+              onClick={() => {
+                const newId = new Date().getTime();
+                const labelJpn = `日本語_男性_${wordNumber}`;
+                const itemJpn: SelectedItem = {
+                  wordNumber: wordNumber as 1 | 2 | 3,
+                  speakLanguage: '日本語',
+                  gender: '男性',
+                  id: newId.toString(),
+                  label: labelJpn,
+                  showJapaneseSentence: true,
+                  showEnglishSentence: true,
+                  wordType: wordTypes[wordNumber - 1] as '①単語' | '②フレーズ' | '③文章',
+                };
+                setSelectedItems([...selectedItems, itemJpn]);
+              }}
+            >
+              {wordTypes[wordNumber - 1]}（日本語）
+            </button>
           </div>
         ))}
       </div>
