@@ -365,19 +365,20 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
         )}
 
-        {/* 保存ボタン */}
+        {/* キャンセルボタンと保存ボタン */}
+        <button
+          onClick={onClose}
+          className={`mt-4 mr-6 px-4 py-2 text-white rounded transition-colors bg-red-500 hover:bg-red-600'}`}
+          >
+          キャンセル
+        </button>
         <button
           onClick={handleSave}
           className={`mt-4 mr-4 px-4 py-2 text-white rounded transition-colors ${localItems.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'}`}
           >
           保存
         </button>
-        <button
-          onClick={onClose}
-          className={`mt-4 px-4 py-2 text-white rounded transition-colors bg-red-500 hover:bg-red-600'}`}
-          >
-          キャンセル
-        </button>
+
       </div>
     </div>
   );

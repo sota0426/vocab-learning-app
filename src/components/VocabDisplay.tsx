@@ -9,8 +9,13 @@ import NavigationControls from './AudioNavigationControls';
 import SettingsModal from './DisplaySettingsModal';
 import { Settings } from 'lucide-react';
 import { VocabWord, SelectedItem } from '../types';
+// VocabDisplay.tsx の冒頭部分に追加
+interface VocabDisplayProps {
+  onBackToHome: () => void;
+}
 
-export default function VocabDisplay() {
+
+export default function VocabDisplay({ onBackToHome }: VocabDisplayProps) {
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0); // 現在の単語のインデックス
   const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0); // 現在の音声のインデックス
   const [isPlaying, setIsPlaying] = useState<boolean>(false); // 音声再生の状態
@@ -153,6 +158,15 @@ export default function VocabDisplay() {
 
   return (
     <div className="flex flex-col h-screen bg-gradient-to-b from-blue-50 to-blue-100 font-sans p-6">
+      {/* ホームに戻るボタン */}
+      <button
+        onClick={onBackToHome}
+        className="absolute top-4 left-4 p-2 bg-gray-300 rounded-full hover:bg-gray-400 transition-all"
+        aria-label="ホームに戻る"
+      >
+        &#x2715; {/* ×ボタンのマーク */}
+      </button>
+
       {/* メインコンテンツのコンテナ */}
       <div className="flex flex-col md:flex-row justify-center items-center h-full space-y-4 md:space-y-0 md:space-x-6 mb-6">
         
