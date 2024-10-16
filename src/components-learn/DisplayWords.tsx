@@ -78,7 +78,7 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
           {renderOrPlaceholder(
             displayOptions.showWordClass,
             <p className="pb-2 text-gray-700">
-              【単語】 {word.word_class}
+              【単語の分類】 {word.word_class}
             </p>,
           )}
 

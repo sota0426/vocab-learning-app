@@ -26,7 +26,7 @@ export default function VocabDisplay({ onBackToHome }: VocabDisplayProps) {
 
   // 選択された項目の初期状態
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>(()=>{
-    const savedItems = localStorage.getItem('selectedItems');
+    const savedItems = localStorage.getItem('ENG_learning_selectedItems');
     return savedItems ? JSON.parse(savedItems) : [
       {
         id: '1',
@@ -52,7 +52,7 @@ export default function VocabDisplay({ onBackToHome }: VocabDisplayProps) {
   });
 
   const [displayOptions, setDisplayOptions] = useState(()=>{
-    const savedOptions = localStorage.getItem('displayOptions');
+    const savedOptions = localStorage.getItem('ENG_learning_displayOptions');
     return savedOptions ? JSON.parse(savedOptions) : {
       showWordPronunciation: true,
       showWordDescription: true,
@@ -63,11 +63,11 @@ export default function VocabDisplay({ onBackToHome }: VocabDisplayProps) {
   });
 
   useEffect(() => {
-    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+    localStorage.setItem('ENG_learning_selectedItems', JSON.stringify(selectedItems));
   }, [selectedItems]);
 
   useEffect(() => {
-    localStorage.setItem('displayOptions', JSON.stringify(displayOptions));
+    localStorage.setItem('ENG_learning_displayOptions', JSON.stringify(displayOptions));
   }, [displayOptions]);
 
 
@@ -201,7 +201,7 @@ export default function VocabDisplay({ onBackToHome }: VocabDisplayProps) {
         </div>
 
         {/* 画像の表示 */}
-        <div className="flex-grow w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl flex items-center justify-center">
+        <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl flex items-center justify-center">
           <DisplayImage imagePath={getImagePath(currentWordData.img_URL)} />
         </div>
       </div>

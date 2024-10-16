@@ -43,7 +43,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
   // localStorageからdisplayOptionsを取得し、初期化
   useEffect(() => {
-    const savedOptions = localStorage.getItem('displayOptions');
+    const savedOptions = localStorage.getItem('ENG_learning_displayOptions');
     if (savedOptions) {
       setDisplayOptions(JSON.parse(savedOptions));
     }
@@ -51,7 +51,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
   // localStorageからselectedItemsを取得し、初期化
   useEffect(() => {
-    const savedItems = localStorage.getItem('selectedItems');
+    const savedItems = localStorage.getItem('ENG_learning_selectedItems');
     if (savedItems) {
       setSelectedItems(JSON.parse(savedItems));
     }
@@ -64,11 +64,158 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     });
   };
 
+ // カスタムデータ1
+const customData1: SelectedItem[] = [
+  {
+    id: '1',
+    label: '英語_女性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '英語',
+    gender: '女性',
+    wordNumber: 1,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '2',
+    label: '日本語_男性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '日本語',
+    gender: '男性',
+    wordNumber: 1,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+   {
+    id: '3',
+    label: '英語_女性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '英語',
+    gender: '女性',
+    wordNumber: 1,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+
+];
+
+// カスタムデータ2
+const customData2: SelectedItem[] = [
+  {
+    id: '1',
+    label: '英語_女性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '英語',
+    gender: '女性', // 英語は女性に修正
+    wordNumber: 1,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '2',
+    label: '日本語_男性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '日本語',
+    gender: '男性', // 日本語は男性に修正
+    wordNumber: 1,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+  {
+    id: '3',
+    label: '英語_女性_2',
+    wordType: '②フレーズ', // 型 '②フレーズ' に合わせて修正
+    speakLanguage: '英語',
+    gender: '女性', // 英語は女性に修正
+    wordNumber: 2,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '4',
+    label: '日本語_男性_2',
+    wordType: '②フレーズ', // 型 '②フレーズ' に合わせて修正
+    speakLanguage: '日本語',
+    gender: '男性', // 日本語は男性に修正
+    wordNumber: 2,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+  {
+    id: '5',
+    label: '英語_女性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '英語',
+    gender: '女性', // 英語は女性に修正
+    wordNumber: 3,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '6',
+    label: '日本語_男性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '日本語',
+    gender: '男性', // 日本語は男性に修正
+    wordNumber: 3,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+];
+
+const customData3: SelectedItem[] = [
+  {
+    id: '1',
+    label: '英語_女性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '英語',
+    gender: '女性', // 英語は女性に修正
+    wordNumber: 3,
+    showJapaneseSentence: false,
+    showEnglishSentence: false,
+  },
+  {
+    id: '2',
+    label: '英語_女性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '英語',
+    gender: '女性', // 英語は女性に修正
+    wordNumber: 3,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '3',
+    label: '日本語_男性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '日本語',
+    gender: '男性', // 日本語は男性に修正
+    wordNumber: 3,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+  {
+    id: '4',
+    label: '英語_男性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '英語',
+    gender: '男性', // 英語は男性に修正
+    wordNumber: 3,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+];
+
+  // カスタムボタンが押されたときに初期データを置き換える処理
+  const applyCustomData = (customData: SelectedItem[]) => {
+    setLocalItems(customData);
+  };
+
   // 保存ボタンが押されたときの処理
   const handleSave = () => {
     if (localItems.length === 0) return;
-    localStorage.setItem('displayOptions', JSON.stringify(displayOptions));
-    localStorage.setItem('selectedItems', JSON.stringify(localItems));
+    localStorage.setItem('ENG_learning_displayOptions', JSON.stringify(displayOptions));
+    localStorage.setItem('ENG_learning_selectedItems', JSON.stringify(localItems));
     setSelectedItems(localItems);
     onClose(); // モーダルを閉じる
   };
@@ -234,6 +381,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
 
         {activeTab === 'audio' && (
           <div className="flex flex-col space-y-4">
+
+
             {/* 左側: 選択された項目のリストと並び替え */}
             <div className="flex flex-col space-y-2">
               <p className="text-sm text-left mb-4">※ドラッグ＆ドロップで並び替えができます。</p>
@@ -313,14 +462,16 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                 </Droppable>
               </DragDropContext>
             </div>
+              
+          
 
             {/* 右側: ワードと音声選択のボタン形式 */}
-            <div className="flex flex-row space-x-2">
-              <h1 className="text-lg font-semibold mb-4">音声追加</h1>
+            <h2 className="text-lg font-semibold">自由追加</h2>
+            <div className="flex space-x-4 mt-2">
               {[1, 2, 3].map((wordNumber) => (
                 <div key={wordNumber} className="mb-4 flex flex-col">
                   <button
-                    className="px-4 py-2 border text-sm bg-white text-black rounded"
+                    className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded"
                     onClick={() => {
                       const newId = new Date().getTime();
                       const labelEng = `英語_男性_${wordNumber}`;
@@ -340,7 +491,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
                     {wordTypes[wordNumber - 1]}（英語）
                   </button>
                   <button
-                    className="px-4 py-2 border text-sm bg-white text-black rounded mt-2"
+                    className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
                     onClick={() => {
                       const newId = new Date().getTime();
                       const labelJpn = `日本語_男性_${wordNumber}`;
@@ -364,7 +515,31 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           </div>
         )}
-
+  {/* おすすめカスタム */}
+           <div className="mb-6">
+              <br />
+              <h2 className="text-lg font-semibold">おすすめカスタム</h2>
+              <div className="flex space-x-4 mt-2 ">
+                <button
+                  onClick={() => applyCustomData(customData1)}
+                    className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
+                >
+                  単語のみ（英,英,日）
+                </button>
+                <button
+                  onClick={() => applyCustomData(customData2)}
+                    className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
+                >
+                  単語⇒フレーズ⇒英文
+                </button>
+                <button
+                  onClick={() => applyCustomData(customData3)}
+                    className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
+                >
+                  英文のみ（英,英,日,英）
+                </button>                
+              </div>
+            </div>
         {/* キャンセルボタンと保存ボタン */}
         <button
           onClick={onClose}

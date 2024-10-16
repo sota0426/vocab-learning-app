@@ -42,3 +42,8 @@ export interface VocabWord {
     showEnglishSentence: boolean;  // 英語文章の表示状態
   }
   
+  export interface VocabDisplayProps {
+    onBackToHome: () => void;
+    registerWords: (words: VocabWord[]) => void;
+  }
+  

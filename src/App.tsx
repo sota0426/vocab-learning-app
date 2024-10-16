@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import VocabDisplay from '../src/components/VocabDisplay'; // ".tsx"は省略可
+import VocabDisplay from './components-learn/VocabDisplay'; // ".tsx"は省略可
 
 const App = () => {
   const [activePage, setActivePage] = useState<string>('menu'); // メニュー画面を初期画面に設定
