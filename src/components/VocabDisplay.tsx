@@ -20,28 +20,51 @@ export default function VocabDisplay() {
   const currentWordData: VocabWord = vocabData[currentWordIndex];
 
   // 選択された項目の初期状態
-  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>([
-    {
-      id: '1',
-      label: '英語_男性_1',
-      wordType: '①単語',
-      speakLanguage: '英語',
-      gender: '男性',
-      wordNumber: 1,
-      showJapaneseSentence: false,
-      showEnglishSentence: true,
-    },
-    {
-      id: '2',
-      label: '日本語_男性_1',
-      wordType: '①単語',
-      speakLanguage: '日本語',
-      gender: '男性',
-      wordNumber: 1,
-      showJapaneseSentence: true,
-      showEnglishSentence: false,
-    },
-  ]);
+  const [selectedItems, setSelectedItems] = useState<SelectedItem[]>(()=>{
+    const savedItems = localStorage.getItem('selectedItems');
+    return savedItems ? JSON.parse(savedItems) : [
+      {
+        id: '1',
+        label: '英語_男性_1',
+        wordType: '①単語',
+        speakLanguage: '英語',
+        gender: '男性',
+        wordNumber: 1,
+        showJapaneseSentence: false,
+        showEnglishSentence: true,
+      },
+      {
+        id: '2',
+        label: '日本語_男性_1',
+        wordType: '①単語',
+        speakLanguage: '日本語',
+        gender: '男性',
+        wordNumber: 1,
+        showJapaneseSentence: true,
+        showEnglishSentence: true,
+      },
+    ];
+  });
+
+  const [displayOptions, setDisplayOptions] = useState(()=>{
+    const savedOptions = localStorage.getItem('displayOptions');
+    return savedOptions ? JSON.parse(savedOptions) : {
+      showWordPronunciation: true,
+      showWordDescription: true,
+      showWordClass: true,
+      showWordStructure: true,
+      showWordAlt: true,
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+  }, [selectedItems]);
+
+  useEffect(() => {
+    localStorage.setItem('displayOptions', JSON.stringify(displayOptions));
+  }, [displayOptions]);
+
 
   // 現在のオーディオソースを取得する関数
   const getAudioSource = (): string => {
@@ -72,14 +95,6 @@ export default function VocabDisplay() {
     return currentWordData;
   };
 
-  // displayOptions を追加
-  const [displayOptions, setDisplayOptions] = useState({
-    showWordPronunciation: true,
-    showWordDescription: true,
-    showWordClass: true,
-    showWordStructure: true,
-    showWordAlt: true,
-  });
 
   // 画像パスをフォーマットする関数
   const getImagePath = (imagePath: string): string => {
