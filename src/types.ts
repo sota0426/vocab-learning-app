@@ -16,19 +16,14 @@ export interface VocabWord {
     word_alt_ja: string;
     word_description: string;
     img_URL: string;
-    // 他の必要なフィールドも追加
-    ENG_female_1: string;
-    ENG_female_2: string;
-    ENG_female_3: string;
-    ENG_male_1: string;
-    ENG_male_2: string;
-    ENG_male_3: string;
-    JPN_female_1: string;
-    JPN_female_2: string;
-    JPN_female_3: string;
-    JPN_male_1: string;
-    JPN_male_2: string;
-    JPN_male_3: string;
+    ENG_1: string;
+    ENG_2: string;
+    ENG_3: string;
+    JPN_1: string;
+    JPN_2: string;
+    JPN_3: string;
+    remind_frag: boolean;
+    quiz_level: number;
   }
   
   export interface SelectedItem {
@@ -36,7 +31,6 @@ export interface VocabWord {
     label: string;
     wordType: '①単語' | '②フレーズ' | '③文章';
     speakLanguage: '英語' | '日本語';
-    gender: '男性' | '女性';
     wordNumber: 1 | 2 | 3;
     showJapaneseSentence: boolean; // 日本語文章の表示状態
     showEnglishSentence: boolean;  // 英語文章の表示状態
@@ -47,3 +41,7 @@ export interface VocabWord {
     registerWords: (words: VocabWord[]) => void;
   }
   
+  export interface QuizDisplayProps {
+    onBackToHome: () => void;
+    onQuizStart: () => void;
+  }

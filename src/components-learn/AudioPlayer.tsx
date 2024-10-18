@@ -22,7 +22,9 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
 
   useEffect(() => {
     if (isPlaying && audioRef.current) {
+      
       audioRef.current.playbackRate = playbackRate;
+      
       audioRef.current
         .play()
         .catch((error) => console.error('Audio playback failed:', error));
@@ -30,10 +32,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({
       audioRef.current.pause();
     }
   }, [isPlaying, playbackRate, src]);
-
-  const handleEnded=()=>{
-    onEnded();
-  }
 
   return (
     <div className="flex space-x-2 items-center">

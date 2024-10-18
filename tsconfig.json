@@ -1,19 +1,20 @@
 {
   "compilerOptions": {
-    "target": "ES6",                         // 出力のJavaScriptバージョン
-    "lib": ["dom", "dom.iterable", "esnext"], // 使用するライブラリ
-    "allowJs": true,                         // JSファイルを許可する
-    "skipLibCheck": false,                    // 型チェックをスキップ
-    "esModuleInterop": true,                 // ESモジュールとの互換性を保つ
-    "allowSyntheticDefaultImports": true,    // デフォルトインポートを許可
-    "strict": true,                          // 厳密な型チェック
-    "forceConsistentCasingInFileNames": true, // ファイル名の大文字小文字を強制
-    "noFallthroughCasesInSwitch": true,      // スイッチ文のフォールスルーを防ぐ
-    "module": "ESNext",                      // ESモジュールのサポート
-    "moduleResolution": "node",              // Node.jsのモジュール解決を使用
-    "resolveJsonModule": true,               // JSONファイルをインポートできるようにする
-    "isolatedModules": true,                 // 各ファイルを独立したモジュールとして扱う
-    "jsx": "react-jsx"                       // JSXサポート
+    "target": "ES6",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "outDir": "./dist"   // 出力先ディレクトリを設定
   },
-  "include": ["src"]                         // コンパイルするファイルのディレクトリ
+  "include": ["src"]
 }

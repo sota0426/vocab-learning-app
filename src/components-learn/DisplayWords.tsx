@@ -25,17 +25,24 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
   displayOptions,
 }) => {
   // Helper function to render content or placeholder
-  const renderOrPlaceholder = (
-    condition: boolean,
-    content: React.ReactNode,
-    className: string = ''
-  ) => {
-    return condition ? (
-      content
-    ) : (
-      <div className={className} aria-hidden="true"></div>
-    );
-  };
+// Helper function to render content or placeholder
+const renderOrPlaceholder = (
+  condition: boolean,
+  content: React.ReactNode,
+  className: string = '',
+  placeholderHeight: string = 'auto' // Added placeholder height parameter
+) => {
+  return condition ? (
+    content
+  ) : (
+    <div
+      className={className}
+      aria-hidden="true"
+      style={{ height: placeholderHeight }} // Set the height of the placeholder
+    ></div>
+  );
+};
+
 
   // Calculate font scale based on the 'number' prop
   const fontScale = number === 1 ? 1 : number === 2 ? 0.9 : 0.8;
@@ -49,13 +56,16 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
         No.{word.id}
       </div>
       <div className="w-full relative text-center">
-        {renderOrPlaceholder(
-          showEnglish,
-          <p style={{ fontSize: dynamicFontSize }}>
-            {word[`word_${number}_en`]}
-          </p>,
-          'h-12 mb-2'
-        )}
+
+      {renderOrPlaceholder(
+        showEnglish,
+        <p style={{ fontSize: dynamicFontSize }}>
+          {word[`word_${number}_en`]}
+        </p>,
+        'h-12 mb-2',
+        `${dynamicFontSize}` // Specify the placeholder height dynamically
+      )}
+
 
         {renderOrPlaceholder(
           displayOptions.showWordPronunciation && showEnglish && number === 1,
@@ -70,7 +80,9 @@ const DisplayWords: React.FC<WordDisplayProps> = ({
           <h2 style={{ fontSize: `clamp(${2 * fontScale}rem, ${2 * fontScale}vw, ${4 * fontScale}rem)` }}>
             {word[`word_${number}_ja`]}
           </h2>,
-          'h-12 mb-2'
+          'h-12 mb-2',
+          `${dynamicFontSize}`
+
         )}
         <br />
 

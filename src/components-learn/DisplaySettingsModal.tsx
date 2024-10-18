@@ -71,7 +71,6 @@ const customData1: SelectedItem[] = [
     label: '英語_女性_1',
     wordType: '①単語', // 型 '①単語' に合わせて修正
     speakLanguage: '英語',
-    gender: '女性',
     wordNumber: 1,
     showJapaneseSentence: false,
     showEnglishSentence: true,
@@ -81,7 +80,6 @@ const customData1: SelectedItem[] = [
     label: '日本語_男性_1',
     wordType: '①単語', // 型 '①単語' に合わせて修正
     speakLanguage: '日本語',
-    gender: '男性',
     wordNumber: 1,
     showJapaneseSentence: true,
     showEnglishSentence: true,
@@ -91,22 +89,49 @@ const customData1: SelectedItem[] = [
     label: '英語_女性_1',
     wordType: '①単語', // 型 '①単語' に合わせて修正
     speakLanguage: '英語',
-    gender: '女性',
     wordNumber: 1,
     showJapaneseSentence: true,
     showEnglishSentence: true,
   },
 
 ];
-
-// カスタムデータ2
 const customData2: SelectedItem[] = [
+  {
+    id: '1',
+    label: '日本語_男性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '日本語',
+    wordNumber: 1,
+    showJapaneseSentence: true,
+    showEnglishSentence: false,
+  },
+   {
+    id: '2',
+    label: '英語_女性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '英語',
+    wordNumber: 1,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+   {
+    id: '3',
+    label: '英語_女性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '英語',
+    wordNumber: 1,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+
+];
+// カスタムデータ2
+const customData3: SelectedItem[] = [
   {
     id: '1',
     label: '英語_女性_1',
     wordType: '①単語', // 型 '①単語' に合わせて修正
     speakLanguage: '英語',
-    gender: '女性', // 英語は女性に修正
     wordNumber: 1,
     showJapaneseSentence: false,
     showEnglishSentence: true,
@@ -116,7 +141,6 @@ const customData2: SelectedItem[] = [
     label: '日本語_男性_1',
     wordType: '①単語', // 型 '①単語' に合わせて修正
     speakLanguage: '日本語',
-    gender: '男性', // 日本語は男性に修正
     wordNumber: 1,
     showJapaneseSentence: true,
     showEnglishSentence: true,
@@ -126,7 +150,6 @@ const customData2: SelectedItem[] = [
     label: '英語_女性_2',
     wordType: '②フレーズ', // 型 '②フレーズ' に合わせて修正
     speakLanguage: '英語',
-    gender: '女性', // 英語は女性に修正
     wordNumber: 2,
     showJapaneseSentence: false,
     showEnglishSentence: true,
@@ -136,7 +159,6 @@ const customData2: SelectedItem[] = [
     label: '日本語_男性_2',
     wordType: '②フレーズ', // 型 '②フレーズ' に合わせて修正
     speakLanguage: '日本語',
-    gender: '男性', // 日本語は男性に修正
     wordNumber: 2,
     showJapaneseSentence: true,
     showEnglishSentence: true,
@@ -146,7 +168,6 @@ const customData2: SelectedItem[] = [
     label: '英語_女性_3',
     wordType: '③文章', // 型 '③文章' に合わせて修正
     speakLanguage: '英語',
-    gender: '女性', // 英語は女性に修正
     wordNumber: 3,
     showJapaneseSentence: false,
     showEnglishSentence: true,
@@ -156,20 +177,18 @@ const customData2: SelectedItem[] = [
     label: '日本語_男性_3',
     wordType: '③文章', // 型 '③文章' に合わせて修正
     speakLanguage: '日本語',
-    gender: '男性', // 日本語は男性に修正
     wordNumber: 3,
     showJapaneseSentence: true,
     showEnglishSentence: true,
   },
 ];
 
-const customData3: SelectedItem[] = [
+const customData4: SelectedItem[] = [
   {
     id: '1',
     label: '英語_女性_3',
     wordType: '③文章', // 型 '③文章' に合わせて修正
     speakLanguage: '英語',
-    gender: '女性', // 英語は女性に修正
     wordNumber: 3,
     showJapaneseSentence: false,
     showEnglishSentence: false,
@@ -179,7 +198,6 @@ const customData3: SelectedItem[] = [
     label: '英語_女性_3',
     wordType: '③文章', // 型 '③文章' に合わせて修正
     speakLanguage: '英語',
-    gender: '女性', // 英語は女性に修正
     wordNumber: 3,
     showJapaneseSentence: false,
     showEnglishSentence: true,
@@ -189,7 +207,6 @@ const customData3: SelectedItem[] = [
     label: '日本語_男性_3',
     wordType: '③文章', // 型 '③文章' に合わせて修正
     speakLanguage: '日本語',
-    gender: '男性', // 日本語は男性に修正
     wordNumber: 3,
     showJapaneseSentence: true,
     showEnglishSentence: true,
@@ -199,7 +216,6 @@ const customData3: SelectedItem[] = [
     label: '英語_男性_3',
     wordType: '③文章', // 型 '③文章' に合わせて修正
     speakLanguage: '英語',
-    gender: '男性', // 英語は男性に修正
     wordNumber: 3,
     showJapaneseSentence: true,
     showEnglishSentence: true,
@@ -234,16 +250,6 @@ const customData3: SelectedItem[] = [
     setLocalItems(items);
   };
 
-  // 性別を切り替える関数
-  const toggleGender = (id: string) => {
-    setLocalItems(
-      localItems.map((item) =>
-        item.id === id
-          ? { ...item, gender: item.gender === '男性' ? '女性' : '男性' }
-          : item
-      )
-    );
-  };
 
   // 言語の表示状態を切り替える関数（1つのボタンで4つの状態を切り替え）
   const toggleLanguageEnabled = (id: string) => {
@@ -320,62 +326,99 @@ const customData3: SelectedItem[] = [
           </button>
         </div>
 
+
+
         {/* アクティブなタブの内容を表示 */}
         {activeTab === 'playback' && (
           <div>
-            {/* 再生設定 */}
-            <div className="mb-4 text-left">
-              <label className="block mb-2">
-                <input
-                  type="checkbox"
-                  name="showWordPronunciation"
-                  checked={displayOptions.showWordPronunciation}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-               発音
-              </label>
-              <label className="block mb-2">
-                <input
-                  type="checkbox"
-                  name="showWordDescription"
-                  checked={displayOptions.showWordDescription}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                単語の説明
-              </label>
-              <label className="block mb-2">
-                <input
-                  type="checkbox"
-                  name="showWordClass"
-                  checked={displayOptions.showWordClass}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                単語のクラス（品詞）
-              </label>
-              <label className="block mb-2">
-                <input
-                  type="checkbox"
-                  name="showWordStructure"
-                  checked={displayOptions.showWordStructure}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                単語の構造
-              </label>
-              <label className="block mb-2">
-                <input
-                  type="checkbox"
-                  name="showWordAlt"
-                  checked={displayOptions.showWordAlt}
-                  onChange={handleCheckboxChange}
-                  className="mr-2"
-                />
-                別の単語（英語・日本語）
-              </label>
-            </div>
+{activeTab === 'playback' && (
+  <div>
+    
+    {/* 再生速度の設定 */}
+    <div className="mb-4">
+      <label className="block mb-2">再生速度（{playbackRate.toFixed(1)}x）</label>
+      <input
+        type="range"
+        min="0.7"
+        max="1.3"
+        step="0.1"
+        value={playbackRate}
+        onChange={(e) => setPlaybackRate(parseFloat(e.target.value))}
+        className="w-full"
+      />
+    </div>
+
+    {/* 次の単語までの遅延時間 */}
+    <div className="mb-4">
+      <label className="block mb-2">次の単語までの遅延（{nextWordDelay.toFixed(1)}秒）</label>
+      <input
+        type="range"
+        min="0.1"
+        max="2.0"
+        step="0.1"
+        value={nextWordDelay}
+        onChange={(e) => setNextWordDelay(parseFloat(e.target.value))}
+        className="w-full"
+      />
+    </div>
+
+    {/* 再生設定 */}
+    <div className="mb-4 text-left">
+      <label className="block mb-2">
+        <input
+          type="checkbox"
+          name="showWordPronunciation"
+          checked={displayOptions.showWordPronunciation}
+          onChange={handleCheckboxChange}
+          className="mr-2"
+        />
+        発音
+      </label>
+      <label className="block mb-2">
+        <input
+          type="checkbox"
+          name="showWordDescription"
+          checked={displayOptions.showWordDescription}
+          onChange={handleCheckboxChange}
+          className="mr-2"
+        />
+        単語の説明
+      </label>
+      <label className="block mb-2">
+        <input
+          type="checkbox"
+          name="showWordClass"
+          checked={displayOptions.showWordClass}
+          onChange={handleCheckboxChange}
+          className="mr-2"
+        />
+        単語のクラス（品詞）
+      </label>
+      <label className="block mb-2">
+        <input
+          type="checkbox"
+          name="showWordStructure"
+          checked={displayOptions.showWordStructure}
+          onChange={handleCheckboxChange}
+          className="mr-2"
+        />
+        単語の構造
+      </label>
+      <label className="block mb-2">
+        <input
+          type="checkbox"
+          name="showWordAlt"
+          checked={displayOptions.showWordAlt}
+          onChange={handleCheckboxChange}
+          className="mr-2"
+        />
+        別の単語（英語・日本語）
+      </label>
+    </div>
+
+  </div>
+)}
+
           </div>
         )}
 
@@ -406,7 +449,7 @@ const customData3: SelectedItem[] = [
                             >
                               <div className="w-full flex justify-between items-center">
                                 <span>
-                                  {index + 1}．{item.wordType}（{item.speakLanguage}）__ {item.gender}音声
+                                  {index + 1}．{item.wordType}（{item.speakLanguage}）
                                 </span>
                               </div>
 
@@ -434,16 +477,6 @@ const customData3: SelectedItem[] = [
                                     : '  なし  '}
                                 </button>
 
-                                {/* 性別切り替えボタン */}
-                                <button
-                                  onClick={() => toggleGender(item.id)}
-                                  className={`px-2 py-1 rounded ${
-                                    item.gender === '男性' ? 'bg-green-500' : 'bg-pink-500'
-                                  } text-white`}
-                                  aria-label={item.gender === '男性' ? '男性に変更' : '女性に変更'}
-                                >
-                                  {item.gender}音声
-                                </button>
 
                                 <button
                                   onClick={() => handleRemoveItem(item.id)}
@@ -474,11 +507,10 @@ const customData3: SelectedItem[] = [
                     className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded"
                     onClick={() => {
                       const newId = new Date().getTime();
-                      const labelEng = `英語_男性_${wordNumber}`;
+                      const labelEng = `英語_${wordNumber}`;
                       const itemEng: SelectedItem = {
                         wordNumber: wordNumber as 1 | 2 | 3,
                         speakLanguage: '英語',
-                        gender: '男性',
                         id: newId.toString(),
                         label: labelEng,
                         showJapaneseSentence: false,
@@ -494,11 +526,10 @@ const customData3: SelectedItem[] = [
                     className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
                     onClick={() => {
                       const newId = new Date().getTime();
-                      const labelJpn = `日本語_男性_${wordNumber}`;
+                      const labelJpn = `日本語_${wordNumber}`;
                       const itemJpn: SelectedItem = {
                         wordNumber: wordNumber as 1 | 2 | 3,
                         speakLanguage: '日本語',
-                        gender: '男性',
                         id: newId.toString(),
                         label: labelJpn,
                         showJapaneseSentence: true,
@@ -524,19 +555,25 @@ const customData3: SelectedItem[] = [
                   onClick={() => applyCustomData(customData1)}
                     className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
                 >
-                  単語のみ（英,英,日）
+                  単語（英⇒日）
                 </button>
                 <button
                   onClick={() => applyCustomData(customData2)}
                     className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
                 >
-                  単語⇒フレーズ⇒英文
-                </button>
+                  単語（日⇒英）
+                </button>                
                 <button
                   onClick={() => applyCustomData(customData3)}
                     className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
                 >
-                  英文のみ（英,英,日,英）
+                  単語⇒フレーズ⇒英文
+                </button>
+                <button
+                  onClick={() => applyCustomData(customData4)}
+                    className="px-4 py-2 border text-sm bg-white hover:bg-gray-100 text-black rounded mt-2"
+                >
+                  英文マスター（英⇒日）
                 </button>                
               </div>
             </div>
