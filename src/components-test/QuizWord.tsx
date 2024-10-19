@@ -4,14 +4,10 @@ import DisplayImage from '../components-learn/DisplayImage';
 import AudioPlayer from '../components-learn/AudioPlayer';
 import { VocabWord } from '../components-tools/types';
 import { useNavigate } from 'react-router-dom';
+import { QuizDisplayProps } from '../components-tools/types';
 
-interface QuizDisplayProps {
-  onBackToHome: () => void;
-  onQuizStart: () => void;
-  quizType: 'enToJa' | 'jaToEn';  // クイズのタイプを指定する引数を追加
-}
 
-export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisplayProps) {
+export default function WordQuiz({ onBackToHome, onQuizStart, Type, hintOption }: QuizDisplayProps) {
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [choices, setChoices] = useState<string[]>([]);
@@ -19,7 +15,8 @@ export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisp
   const [isQuizFinished, setIsQuizFinished] = useState<boolean>(false);
   const [showFeedbackOverlay, setShowFeedbackOverlay] = useState<string | null>(null);
   const [clickedButtonIndex, setClickedButtonIndex] = useState<number | null>(null);
-  
+  const [isAnswer, setIsAnswer] = useState<boolean>(false);
+  const [isHint, setIsHint] = useState<boolean>(hintOption ? hintOption : false); 
   // 正解・不正解の単語リストを管理するステートを追加
   const [correctAnswers, setCorrectAnswers] = useState<VocabWord[]>([]);
   const [incorrectAnswers, setIncorrectAnswers] = useState<VocabWord[]>([]);
@@ -29,38 +26,19 @@ export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisp
   const vocabData: VocabWord[] = vocabDataRaw.filter(word => word.remind_frag === true);
   const currentWordData: VocabWord = vocabData[currentWordIndex];
 
-  const getAudioSource = (): string => {
-    const audioKey = quizType === 'enToJa' ? "ENG_1" : "JPN_1";  // クイズタイプに応じてオーディオを切り替え
-    let audioPath = currentWordData[audioKey as keyof VocabWord] as string;
-    if (!audioPath) {
-      console.warn(`Audio file not found for key: ${audioKey}`);
-      return '';
-    }
-    audioPath = audioPath.replace(/\\/g, '/');
-    if (audioPath.startsWith('public/')) {
-      audioPath = audioPath.replace('public/', '/');
-    }
-    return audioPath;
-  };
-
-  const getImagePath = (imagePath: string): string => {
-    if (imagePath.startsWith('public\\')) {
-      return '/' + imagePath.replace('public\\', '').replace(/\\/g, '/');
-    }
-    return imagePath;
-  };
 
   const generateChoices = () => {
     const sameClassWords = vocabDataRaw.filter(word => word.word_class === currentWordData.word_class);
     let randomChoices: string[] = [];
     while (randomChoices.length < 3) {
       const randomIndex = Math.floor(Math.random() * sameClassWords.length);
-      const randomWord = quizType === 'enToJa' ? sameClassWords[randomIndex].word_1_ja : sameClassWords[randomIndex].word_1_en;
-      if (randomWord !== (quizType === 'enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en) && !randomChoices.includes(randomWord)) {
+      const randomWord = Type === 'quiz_enToJa' ? sameClassWords[randomIndex].word_1_ja : sameClassWords[randomIndex].word_1_en;
+      if (randomWord !== (Type === 'quiz_enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en) && !randomChoices.includes(randomWord)) {
         randomChoices.push(randomWord);
       }
+
     }
-    const correctAnswer = quizType === 'enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en;
+    const correctAnswer = Type === 'quiz_enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en;
     const allChoices = [...randomChoices, correctAnswer].sort(() => Math.random() - 0.5);
     setChoices(allChoices);
   };
@@ -72,15 +50,18 @@ export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisp
     setClickedButtonIndex(null);
   }, [currentWordIndex]);
 
-  const handleAudioEnded = () => {
-    setIsPlaying(false);
-  };
+
 
   const handleChoiceClick = (choice: string, index: number) => {
+    setIsAnswer(true);
     setClickedButtonIndex(index);
-    const correctAnswer = quizType === 'enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en;
+    setIsPlaying(false);
+  
+    const correctAnswer = Type === 'quiz_enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en;
+    
+    // 答えが正解か不正解かを確認
     if (choice === correctAnswer) {
-      setFeedback('正解です！');
+      setFeedback("正解！");
       setShowFeedbackOverlay('correct');
       setCorrectAnswers(prev => [...prev, currentWordData]); // 正解リストに追加
     } else {
@@ -88,10 +69,16 @@ export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisp
       setShowFeedbackOverlay('incorrect');
       setIncorrectAnswers(prev => [...prev, currentWordData]); // 不正解リストに追加
     }
+  
+    // 次の単語への移行処理
     setTimeout(() => {
+      setIsHint(hintOption ? true : false);
+      setIsPlaying(true);
+      setIsAnswer(false);
       handleNextWord();
     }, 1000);
   };
+  
 
   const handleNextWord = () => {
     if (currentWordIndex < vocabData.length - 1) {
@@ -124,8 +111,12 @@ export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisp
       {!isQuizFinished && (
       <div className="flex-grow w-full md:w-8/12 bg-white shadow-lg rounded-lg p-8 pt-8 transition-all duration-300 ease-in-out hover:shadow-xl">
         <div className="flex justify-center mt-6">
-          <DisplayImage imagePath={getImagePath(currentWordData.img_URL)} />
-        </div>
+          {Type === 'quiz_jaToEn' || isHint || isAnswer ?
+          <DisplayImage imagePath={currentWordData.img_URL} />
+         :
+          <DisplayImage imagePath="public\BlackImage.webp" />
+            }         
+       </div>
       </div>
       )}
 
@@ -135,16 +126,16 @@ export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisp
             <p className="text-4xl font-bold mb-4">第{currentWordIndex + 1}問</p>
 
             <p className="text-6xl font-bold mb-6">
-              {quizType === 'enToJa' ? currentWordData.word_1_en : currentWordData.word_1_ja}
+              {Type === 'quiz_enToJa' ? currentWordData.word_1_en : currentWordData.word_1_ja}
             </p>
 
             <AudioPlayer
-              src={getAudioSource()}
-              playbackRate={1}
+              type="quiz_enToJa"
+              currentWordData={currentWordData}
+              wordNumber={1}
               isPlaying={isPlaying}
               onPlay={() => setIsPlaying(true)}
               onStop={() => setIsPlaying(false)}
-              onEnded={handleAudioEnded}
             />
             <div className="mt-6 justify-center">
               {choices.map((choice, index) => (
@@ -192,31 +183,41 @@ export default function Quiz_1({ onBackToHome, onQuizStart, quizType }: QuizDisp
 
 
 
-            <button
-              onClick={() => restartQuiz()}
-              className="block w-full text-xl p-4 bg-green-500 text-white rounded mb-6 hover:bg-green-600 transition-all"
-            >
-              もう一度挑戦する
-            </button>
+            {isQuizFinished && (
+  <div className="mt-6">
+ 
 
-            <button
-              onClick={() => navigate('/quiz_2')}
-              className="block w-full text-xl p-4 bg-green-500 text-white rounded mb-6 hover:bg-green-600 transition-all"
-            >
-              クイズ2へ進む
-            </button>
+    {/* 再挑戦ボタン */}
+    <button
+      onClick={restartQuiz}
+      className="block w-full text-xl p-4 bg-green-500 text-white rounded mb-6 hover:bg-green-600 transition-all"
+    >
+      もう一度挑戦する
+    </button>
+
+    {/* 戻るボタン */}
+    <button
+      onClick={() => navigate('/')}
+      className="block w-full text-xl p-4 bg-green-500 text-white rounded mb-6 hover:bg-green-600 transition-all"
+    >
+      終了する
+    </button>
+  </div>
+)}
+
+
           </div>
         )}
       </div>
 
       {showFeedbackOverlay && (
-        <div className="absolute inset-0 flex items-center justify-center bg-opacity-50 bg-black">
+        <div className="absolute inset-0 flex items-center justify-center bg-opacity-40 bg-black">
           {showFeedbackOverlay === 'correct' ? (
-            <div className="text-red-600" style={{ fontSize: '40rem' }}>&#x25CB;</div>
+            <div className="text-green-600" style={{ fontSize: '30rem' }}>&#x25CB;</div>
           ) : (
             <div className="text-red-600" style={{ fontSize: '5rem' }}>&#x274C;</div>
           )}
-          {feedback && <p className="mt-4 text-6xl text-white font-bold">{feedback}</p>}
+          {feedback && <p className="mt-4 text-8xl text-white font-bold">{feedback}</p>}
         </div>
       )}
     </div>

@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // ルーティング用のインポート
 import VocabDisplay from './components-learn/VocabDisplay'; 
-import Quiz_1 from './components-test/quiz_1'; 
+import WordQuiz from './components-test/QuizWord'; 
+import ImageQuiz from './components-test/QuizImage';
 
 const App = () => {
   return (
@@ -18,7 +19,7 @@ const App = () => {
                   <li className="mb-4">
                     <button
                       onClick={() => window.location.href = '/learn'}
-                      className="px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
+                      className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
                     >
                       単語覚える
                     </button>
@@ -26,23 +27,39 @@ const App = () => {
                   <li className="mb-4">
                     <button
                       onClick={() => window.location.href = '/quiz_1'}
-                      className="px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
+                      className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
                     >
-                      単語をテストする (Quiz 1)
-                    </button>
-                  </li>
-                  <li className="mb-4">
-                      <button
-                      onClick={() => window.location.href = '/quiz_2'}
-                      className="px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
-                    >
-                      単語をテストする (Quiz 2)
+                      単語テスト（レベル１）英⇒日 画像あり
                     </button>
                   </li>
                   <li className="mb-4">
                     <button
+                      onClick={() => window.location.href = '/quiz_2'}
+                      className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
+                    >
+                      単語テスト（レベル２）日⇒英 画像あり
+                      </button>
+                  </li>
+                  <li className="mb-4">
+                    <button
+                      onClick={() => window.location.href = '/quiz_3'}
+                      className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
+                    >
+                      単語テスト（レベル３）英⇒日 画像なし
+                    </button>
+                  </li>
+                  <li className="mb-4">
+                    <button
+                      onClick={() => window.location.href = '/quiz_4'}
+                      className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
+                    >
+                      単語テスト（レベル４）英文章⇒画像選択
+                    </button>
+                  </li>                  
+                  <li className="mb-4">
+                    <button
                       onClick={() => window.location.href = '/register'}
-                      className="px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
+                      className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
                     >
                       単語を登録する
                     </button>
@@ -59,6 +76,7 @@ const App = () => {
               <VocabDisplay
                 onBackToHome={() => window.location.href = '/'}
                 onQuizStart={() => window.location.href = '/quiz_1'}
+                Type="learn"
               />
             }
           />
@@ -67,10 +85,11 @@ const App = () => {
           <Route
             path="/quiz_1"
             element={
-              <Quiz_1
+              <WordQuiz
                 onBackToHome={() => window.location.href = '/'}
-                onQuizStart={() => window.location.href = '/quiz_1'}
-                quizType="enToJa"
+                onQuizStart={() => window.location.href = '/WordQuiz'}
+                Type="quiz_enToJa"
+                hintOption={true}
               />
             }
           />
@@ -78,14 +97,37 @@ const App = () => {
           <Route
             path="/quiz_2"
             element={
-              <Quiz_1
+              <WordQuiz
                 onBackToHome={() => window.location.href = '/'}
-                onQuizStart={() => window.location.href = '/quiz_1'}
-                quizType="jaToEn"
+                onQuizStart={() => window.location.href = '/WordQuiz'}
+                Type="quiz_jaToEn"
+                hintOption={true}
               />
             }
           />
-
+          {/* Quiz 3のページ */}
+          <Route
+            path="/quiz_3"
+            element={
+              <WordQuiz
+                onBackToHome={() => window.location.href = '/'}
+                onQuizStart={() => window.location.href = '/WordQuiz'}
+                Type="quiz_enToJa"
+                hintOption={false}
+              />
+            }
+          />
+          {/* Quiz 4のページ */}
+          <Route
+            path="/quiz_4"
+            element={
+              <ImageQuiz
+                onBackToHome={() => window.location.href = '/'}
+                onQuizStart={() => window.location.href = '/ImageQuiz'}
+                Type="quiz_enToJa"
+              />
+            }
+          />
           {/* 単語登録ページ - コンテンツは後ほど追加 */}
           <Route
             path="/register"
@@ -93,7 +135,7 @@ const App = () => {
               <div className="text-center">
                 <h2 className="text-2xl font-semibold mb-6">単語を登録する画面</h2>
                 <button
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                  className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
                   onClick={() => window.location.href = '/'}
                 >
                   戻る

@@ -10,18 +10,16 @@ import SettingsModal from './DisplaySettingsModal';
 import { Settings } from 'lucide-react';
 import { VocabWord, SelectedItem } from '../components-tools/types';
 import { useVocabUpdater } from '../components-tools/useVocabUpdater';
-// VocabDisplay.tsx の冒頭部分に追加
-interface VocabDisplayProps {
-  onBackToHome: () => void;
-  onQuizStart: () => void;
-}
+import { QuizDisplayProps } from '../components-tools/types';
 
 
-export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplayProps) {
+
+
+export default function VocabDisplay({ onBackToHome, onQuizStart, Type }: QuizDisplayProps) {
   const { vocabData, preLearnedWordCount, markWordAsLearned } = useVocabUpdater();
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0); // 現在の単語のインデックス
   const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0); // 現在の音声のインデックス
-  const [isPlaying, setIsPlaying] = useState<boolean>(false); // 音声再生の状態
+  const [isPlaying, setIsPlaying] = useState<boolean>(true); // 音声再生の状態
   const [playbackRate, setPlaybackRate] = useState<number>(1); // 再生速度
   const [nextWordDelay, setNextWordDelay] = useState<number>(1); // 次の単語までの遅延時間
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 設定モーダル
@@ -30,26 +28,60 @@ export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplay
   const [selectedItems, setSelectedItems] = useState<SelectedItem[]>(()=>{
     const savedItems = localStorage.getItem('ENG_learning_selectedItems');
     return savedItems ? JSON.parse(savedItems) : [
-      {
-        id: '1',
-        label: '英語_男性_1',
-        wordType: '①単語',
-        speakLanguage: '英語',
-        gender: '男性',
-        wordNumber: 1,
-        showJapaneseSentence: false,
-        showEnglishSentence: true,
-      },
-      {
-        id: '2',
-        label: '日本語_男性_1',
-        wordType: '①単語',
-        speakLanguage: '日本語',
-        gender: '男性',
-        wordNumber: 1,
-        showJapaneseSentence: true,
-        showEnglishSentence: true,
-      },
+  {
+    id: '1',
+    label: '英語_女性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '英語',
+    wordNumber: 1,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '2',
+    label: '日本語_男性_1',
+    wordType: '①単語', // 型 '①単語' に合わせて修正
+    speakLanguage: '日本語',
+    wordNumber: 1,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+  {
+    id: '3',
+    label: '英語_女性_2',
+    wordType: '②フレーズ', // 型 '②フレーズ' に合わせて修正
+    speakLanguage: '英語',
+    wordNumber: 2,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '4',
+    label: '日本語_男性_2',
+    wordType: '②フレーズ', // 型 '②フレーズ' に合わせて修正
+    speakLanguage: '日本語',
+    wordNumber: 2,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
+  {
+    id: '5',
+    label: '英語_女性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '英語',
+    wordNumber: 3,
+    showJapaneseSentence: false,
+    showEnglishSentence: true,
+  },
+  {
+    id: '6',
+    label: '日本語_男性_3',
+    wordType: '③文章', // 型 '③文章' に合わせて修正
+    speakLanguage: '日本語',
+    wordNumber: 3,
+    showJapaneseSentence: true,
+    showEnglishSentence: true,
+  },
     ];
   });
 
@@ -77,41 +109,7 @@ export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplay
   }, [displayOptions]);
 
 
-  // 現在のオーディオソースを取得する関数
-  const getAudioSource = (): string => {
-    // 現在のオーディオインデックスが選択された項目の数を超えている場合、空文字を返す
-    if (currentAudioIndex >= selectedItems.length) {
-      return '';
-    }
 
-    const item = selectedItems[currentAudioIndex];
-    const audioKey = `${item.speakLanguage === '英語' ? 'ENG' : 'JPN'}_${item.wordNumber}`;
-    let audioPath = currentWordData[audioKey as keyof VocabWord] as string;
-    if (!audioPath) {
-      console.warn(`Audio file not found for key: ${audioKey}`);
-      return '';
-    }
-    audioPath = audioPath.replace(/\\/g, '/');
-    if (audioPath.startsWith('public/')) {
-      audioPath = audioPath.replace('public/', '/');
-    }
-    console.log('Adjusted Audio Path:', audioPath);
-    return audioPath;
-  };
-
-  // 表示する単語を取得する関数
-  const getDisplayWord = (): VocabWord => {
-    return currentWordData;
-  };
-
-
-  // 画像パスをフォーマットする関数
-  const getImagePath = (imagePath: string): string => {
-    if (imagePath.startsWith('public\\')) {
-      return '/' + imagePath.replace('public\\', '').replace('\\', '/');
-    }
-    return imagePath;
-  };
 
   // 次の単語に進む関数
   const nextWord = () => {
@@ -154,6 +152,7 @@ export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplay
  // 覚えた単語をマークする関数を呼び出す
  const handleMarkAsLearned = () => {
   markWordAsLearned(currentWordData.id,  { remind_frag: true });
+  nextWord(); // 自動的に次の単語に進む
 };
 
 
@@ -186,7 +185,7 @@ export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplay
           <div className="flex flex-col items-center justify-center">
             {/* DisplayWords コンポーネントに currentWord と wordNumber を渡す */}
             <DisplayWords 
-              word={getDisplayWord()} 
+              word={currentWordData} 
               number={currentWordNumber} 
               showEnglish={selectedItems[currentAudioIndex].showEnglishSentence}
               showJapanese={selectedItems[currentAudioIndex].showJapaneseSentence}
@@ -238,16 +237,20 @@ export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplay
 
         {/* 画像の表示 */}
         <div className="w-full md:w-1/2 bg-white shadow-lg rounded-lg p-8 transition-all duration-300 ease-in-out hover:shadow-xl flex items-center justify-center">
-          <DisplayImage imagePath={getImagePath(currentWordData.img_URL)} />
+          <DisplayImage imagePath={currentWordData.img_URL} />
         </div>
       </div>
 
       <div className="flex items-center justify-center space-x-6"> {/* flex-row で横並びにする */}
         <AudioPlayer
           key={currentAudioIndex} 
-          src={getAudioSource()}
+          type="learn"
+          selectedItems={selectedItems}
+          currentWordData={currentWordData}
+          wordNumber={currentWordNumber}
           playbackRate={playbackRate}
           isPlaying={isPlaying}
+          currentAudioIndex={currentAudioIndex}
           onPlay={() => setIsPlaying(true)}
           onStop={() => {
             setCurrentAudioIndex(0);

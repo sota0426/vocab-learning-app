@@ -35,18 +35,11 @@ export interface VocabWord {
     showJapaneseSentence: boolean; // 日本語文章の表示状態
     showEnglishSentence: boolean;  // 英語文章の表示状態
   }
-  
-  export interface VocabDisplayProps {
-    onBackToHome: () => void;
-    registerWords: (words: VocabWord[]) => void;
-  }
-  
+
   export interface QuizDisplayProps {
     onBackToHome: () => void;
     onQuizStart: () => void;
+    Type: 'learn' | 'quiz_enToJa' | 'quiz_jaToEn';  // クイズのタイプを指定する引数を追加
+    hintOption?: boolean | null;
   }
-
-
-  export interface Quiz_Props {
-    onBackToHome: () => void;  // 必須のプロパティとして型を指定
-  }
+  
