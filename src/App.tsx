@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // ルーティング用のインポート
 import VocabDisplay from './components-learn/VocabDisplay'; 
 import Quiz_1 from './components-test/quiz_1'; 
-import Quiz_2 from './components-test/quiz_2'; // クイズ2のインポート
 
 const App = () => {
   return (
@@ -71,17 +70,18 @@ const App = () => {
               <Quiz_1
                 onBackToHome={() => window.location.href = '/'}
                 onQuizStart={() => window.location.href = '/quiz_1'}
+                quizType="enToJa"
               />
             }
           />
-
           {/* Quiz 2のページ */}
           <Route
             path="/quiz_2"
             element={
-              <Quiz_2
+              <Quiz_1
                 onBackToHome={() => window.location.href = '/'}
-                onQuizStart={() => window.location.href = '/quiz_2'}
+                onQuizStart={() => window.location.href = '/quiz_1'}
+                quizType="jaToEn"
               />
             }
           />

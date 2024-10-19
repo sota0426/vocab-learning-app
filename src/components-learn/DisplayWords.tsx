@@ -1,7 +1,7 @@
 // src/components/DisplayWords.tsx
 
 import React from 'react';
-import { VocabWord } from '../types';
+import { VocabWord } from '../components-tools/types';
 
 interface WordDisplayProps {
   word: VocabWord;

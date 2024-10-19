@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd';
-import { SelectedItem } from '../types'; // プロジェクトに応じてパスを修正
+import { SelectedItem } from '../components-tools/types'; // プロジェクトに応じてパスを修正
 
 interface DisplayOptions {
   showWordPronunciation: boolean;

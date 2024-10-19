@@ -8,7 +8,8 @@ import AudioPlayer from './AudioPlayer';
 import NavigationControls from './AudioNavigationControls';
 import SettingsModal from './DisplaySettingsModal';
 import { Settings } from 'lucide-react';
-import { VocabWord, SelectedItem } from '../types';
+import { VocabWord, SelectedItem } from '../components-tools/types';
+import { useVocabUpdater } from '../components-tools/useVocabUpdater';
 // VocabDisplay.tsx の冒頭部分に追加
 interface VocabDisplayProps {
   onBackToHome: () => void;
@@ -17,6 +18,7 @@ interface VocabDisplayProps {
 
 
 export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplayProps) {
+  const { vocabData, preLearnedWordCount, markWordAsLearned } = useVocabUpdater();
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0); // 現在の単語のインデックス
   const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0); // 現在の音声のインデックス
   const [isPlaying, setIsPlaying] = useState<boolean>(false); // 音声再生の状態
@@ -62,16 +64,8 @@ export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplay
     };
   });
   
-  // vocabData を remind_frag が false のものだけにフィルタリング
-  const [vocabData, setVocabData] = useState<VocabWord[]>(
-    vocabDataRaw.filter(word => word.remind_frag === false)
-  );
-  const currentWordData: VocabWord = vocabData[currentWordIndex];
 
-   // 覚えた単語数を管理するステート
-   const [preLearnedWordCount, setpreLearnedWordCount] = useState<number>(
-    vocabDataRaw.filter(word => word.remind_frag === true).length
-  );
+  const currentWordData: VocabWord = vocabData[currentWordIndex];
   const completeLearnedWordCount = vocabDataRaw.filter(word => word.quiz_level === 3).length
 
   useEffect(() => {
@@ -157,29 +151,12 @@ export default function VocabDisplay({ onBackToHome, onQuizStart }: VocabDisplay
 
 
   // 「覚えた」ボタンを押したときの処理
-  const handleMarkAsLearned = () => {
-    const updatedVocabData = vocabData.map((word, index) => {
-      if (index === currentWordIndex) {
-        return { ...word, remind_frag: true }; // remind_frag を true に変更
-      }
-      return word;
-    });
-        // vocabData を更新し、remind_frag が false のものだけを再度フィルタリング
-
-    setCurrentAudioIndex(0);
-    // vocabData を更新し、remind_frag が false のものだけを再度フィルタリング
-    setVocabData(updatedVocabData.filter(word => word.remind_frag === false));
-
-    // 覚えた単語数を更新
-    setpreLearnedWordCount(prevCount => prevCount + 1); // 「覚えた」単語が1増える
-  };
-
-
-const handleMarkAsQuiz = () => {
-  // クイズページに遷移する処理を追加
-  console.log('クイズに挑戦');
+ // 覚えた単語をマークする関数を呼び出す
+ const handleMarkAsLearned = () => {
+  markWordAsLearned(currentWordData.id,  { remind_frag: true });
 };
- 
+
+
   // デバッグ用: selectedItems と currentAudioIndex をログ出力
   useEffect(() => {
     console.log('Selected Items:', selectedItems);
@@ -234,12 +211,12 @@ const handleMarkAsQuiz = () => {
         </div>
            {/* 覚えたボタンの追加 */}
            <div className="flex items-center justify-center mt-4">
-            <button
-              onClick={handleMarkAsLearned}
-              className="px-4 py-2 mr-6 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300"
-            >
-              覚えたリストに追加
-            </button>
+           <button
+            onClick={handleMarkAsLearned}
+            className="px-4 py-2 mr-6 bg-green-600 text-white rounded-full hover:bg-green-700 transition-all duration-300"
+          >
+            覚えたリストに追加
+          </button>
   
             <button
               onClick={onQuizStart}

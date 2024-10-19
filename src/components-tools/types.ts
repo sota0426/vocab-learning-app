@@ -45,3 +45,8 @@ export interface VocabWord {
     onBackToHome: () => void;
     onQuizStart: () => void;
   }
+
+
+  export interface Quiz_Props {
+    onBackToHome: () => void;  // 必須のプロパティとして型を指定
+  }
