@@ -1,8 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // ルーティング用のインポート
 import VocabDisplay from './components-learn/VocabDisplay'; 
-import WordQuiz from './components-test/QuizWord'; 
-import ImageQuiz from './components-test/QuizImage';
+import WordQuiz from './components-test/Quiz_1_Word'; 
+import ImageQuiz from './components-test/Quiz_2_Image';
+import QuizTyping from './components-test/Quiz_3_Typing';
+import { QuizFinished } from './components-test/Quiz_component';
 
 const App = () => {
   return (
@@ -54,6 +56,14 @@ const App = () => {
                       className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
                     >
                       単語テスト（レベル４）英文章⇒画像選択
+                    </button>
+                  </li>                  
+                  <li className="mb-4">
+                    <button
+                      onClick={() => window.location.href = '/quiz_5'}
+                      className="w-full px-6 py-3 bg-green-500 text-white text-lg rounded-lg hover:bg-green-600 transition-colors"
+                    >
+                      単語テスト（レベル５）タイピング
                     </button>
                   </li>                  
                   <li className="mb-4">
@@ -128,6 +138,21 @@ const App = () => {
               />
             }
           />
+          {/* Quiz 5のページ */}
+          <Route
+            path="/quiz_5"
+            element={
+              <QuizTyping
+                onBackToHome={() => window.location.href = '/'}
+                onQuizStart={() => window.location.href = '/QuizTyping'}
+                Type="quiz_enToJa"
+              />
+            }
+          />
+
+
+
+
           {/* 単語登録ページ - コンテンツは後ほど追加 */}
           <Route
             path="/register"

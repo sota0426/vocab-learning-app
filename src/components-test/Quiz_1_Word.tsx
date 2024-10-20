@@ -5,7 +5,7 @@ import AudioPlayer from '../components-learn/AudioPlayer';
 import { VocabWord } from '../components-tools/types';
 import { useNavigate } from 'react-router-dom';
 import { QuizDisplayProps } from '../components-tools/types';
-
+import { QuizFinished, FeedbackOverlay, AnswerList } from './Quiz_component';
 
 export default function WordQuiz({ onBackToHome, onQuizStart, Type, hintOption }: QuizDisplayProps) {
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
@@ -153,73 +153,40 @@ export default function WordQuiz({ onBackToHome, onQuizStart, Type, hintOption }
           </>
         )}
 
+
+        {/* フィードバック表示 */}      
+      <FeedbackOverlay 
+        showFeedbackOverlay={showFeedbackOverlay as 'correct' | 'incorrect' | null} 
+        feedback={feedback} 
+      />
+
+
         {isQuizFinished && (
           <div className="mt-6">
             <p className="text-2xl font-bold text-green-600">これでクイズは終了です！</p>
 
             {/* 正解・不正解リストの表示 */}
-            <div className="w-full mt-6">
-              <table className="w-full table-auto border-collapse">
-                <thead>
-                  <tr>
-                    <th className="w-1/2 text-xl font-bold p-4 border-b">正解した単語（{correctAnswers.length}個）</th>
-                    <th className="w-1/2 text-xl font-bold p-4 border-b">不正解の単語（{incorrectAnswers.length}個）</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Array.from({ length: Math.max(correctAnswers.length, incorrectAnswers.length) }).map((_, index) => (
-                    <tr key={index}>
-                      <td className="text-lg p-4 border-b">
-                        {correctAnswers[index] ? `${correctAnswers[index].word_1_en} - ${correctAnswers[index].word_1_ja}` : ''}
-                      </td>
-                      <td className="text-lg p-4 border-b">
-                        {incorrectAnswers[index] ? `${incorrectAnswers[index].word_1_en} - ${incorrectAnswers[index].word_1_ja}` : ''}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <AnswerList 
+              correctAnswers={correctAnswers} 
+              incorrectAnswers={incorrectAnswers} 
+            />
 
 
+        {/* クイズ終了画面 */}
+        <QuizFinished 
+          isQuizFinished={isQuizFinished} 
+          restartQuiz={restartQuiz} 
+          navigate={() => navigate('/')}
 
-            {isQuizFinished && (
-  <div className="mt-6">
- 
-
-    {/* 再挑戦ボタン */}
-    <button
-      onClick={restartQuiz}
-      className="block w-full text-xl p-4 bg-green-500 text-white rounded mb-6 hover:bg-green-600 transition-all"
-    >
-      もう一度挑戦する
-    </button>
-
-    {/* 戻るボタン */}
-    <button
-      onClick={() => navigate('/')}
-      className="block w-full text-xl p-4 bg-green-500 text-white rounded mb-6 hover:bg-green-600 transition-all"
-    >
-      終了する
-    </button>
-  </div>
-)}
-
-
+        />
+        
           </div>
         )}
       </div>
 
-      {showFeedbackOverlay && (
-        <div className="absolute inset-0 flex items-center justify-center bg-opacity-40 bg-black">
-          {showFeedbackOverlay === 'correct' ? (
-            <div className="text-green-600" style={{ fontSize: '30rem' }}>&#x25CB;</div>
-          ) : (
-            <div className="text-red-600" style={{ fontSize: '5rem' }}>&#x274C;</div>
-          )}
-          {feedback && <p className="mt-4 text-8xl text-white font-bold">{feedback}</p>}
-        </div>
-      )}
+
+
+
     </div>
   );
 }
