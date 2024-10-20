@@ -130,7 +130,7 @@ export default function WordQuiz({ onBackToHome, onQuizStart, Type, hintOption }
             </p>
 
             <AudioPlayer
-              type="quiz_enToJa"
+              type={Type}
               currentWordData={currentWordData}
               wordNumber={1}
               isPlaying={isPlaying}
