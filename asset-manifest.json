@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/vocab-learning-app/static/css/main.2773e0ef.css",
+    "main.js": "/vocab-learning-app/static/js/main.b71ad977.js",
+    "static/js/453.bca183ca.chunk.js": "/vocab-learning-app/static/js/453.bca183ca.chunk.js",
+    "index.html": "/vocab-learning-app/index.html",
+    "main.2773e0ef.css.map": "/vocab-learning-app/static/css/main.2773e0ef.css.map",
+    "main.b71ad977.js.map": "/vocab-learning-app/static/js/main.b71ad977.js.map",
+    "453.bca183ca.chunk.js.map": "/vocab-learning-app/static/js/453.bca183ca.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.2773e0ef.css",
+    "static/js/main.b71ad977.js"
+  ]
+}
