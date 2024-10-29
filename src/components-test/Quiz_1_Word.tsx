@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useCallback } from 'react';
 import vocabDataRaw from '../data/vocabData.json';
 import DisplayImage from '../components-learn/DisplayImage';
 import AudioPlayer from '../components-learn/AudioPlayer';
@@ -27,7 +27,7 @@ export default function WordQuiz({ onBackToHome, onQuizStart, Type, hintOption }
   const currentWordData: VocabWord = vocabData[currentWordIndex];
 
 
-  const generateChoices = () => {
+  const generateChoices = useCallback(() => {
     const sameClassWords = vocabDataRaw.filter(word => word.word_class === currentWordData.word_class);
     let randomChoices: string[] = [];
     while (randomChoices.length < 3) {
@@ -36,19 +36,18 @@ export default function WordQuiz({ onBackToHome, onQuizStart, Type, hintOption }
       if (randomWord !== (Type === 'quiz_enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en) && !randomChoices.includes(randomWord)) {
         randomChoices.push(randomWord);
       }
-
     }
     const correctAnswer = Type === 'quiz_enToJa' ? currentWordData.word_1_ja : currentWordData.word_1_en;
     const allChoices = [...randomChoices, correctAnswer].sort(() => Math.random() - 0.5);
     setChoices(allChoices);
-  };
+  }, [Type, currentWordData]);
 
   useEffect(() => {
     generateChoices();
     setFeedback(null);
     setShowFeedbackOverlay(null);
     setClickedButtonIndex(null);
-  }, [currentWordIndex]);
+  }, [currentWordIndex, generateChoices]);
 
 
 
