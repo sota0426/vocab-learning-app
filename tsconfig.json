@@ -16,5 +16,6 @@
     "jsx": "react-jsx",
     "outDir": "./dist"   // 出力先ディレクトリを設定
   },
-  "include": ["src"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

@@ -6,11 +6,13 @@ import { VocabWord } from '../components-tools/types';
 
 export const useVocabUpdater = () => {
   const [vocabData, setVocabData] = useState<VocabWord[]>(
-    vocabDataRaw.filter((word) => word.remind_frag === false)
+    // vocabDataRaw.filter((word) => word.remind_frag === false)
+    vocabDataRaw
   );
 
   const [preLearnedWordCount, setPreLearnedWordCount] = useState<number>(
-    vocabDataRaw.filter((word) => word.remind_frag === true).length
+    // vocabDataRaw.filter((word) => word.remind_frag === true).length
+    vocabDataRaw.length
   );
 
   useEffect(() => {
@@ -26,7 +28,8 @@ export const useVocabUpdater = () => {
       return word;
     });
 
-    setVocabData(updatedVocabData.filter((word) => word.remind_frag === false));
+    // setVocabData(updatedVocabData.filter((word) => word.remind_frag === false));
+    setVocabData(updatedVocabData);
     setPreLearnedWordCount((prevCount) => prevCount + 1);
   };
 

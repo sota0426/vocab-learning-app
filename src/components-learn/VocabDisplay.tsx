@@ -1,7 +1,6 @@
 // src/components/VocabDisplay.tsx
 
 import React, { useState, useEffect } from 'react';
-import vocabDataRaw from '../data/vocabData.json';
 import DisplayWords from './DisplayWords';
 import DisplayImage from './DisplayImage';
 import AudioPlayer from './AudioPlayer';
@@ -16,7 +15,7 @@ import { QuizDisplayProps } from '../components-tools/types';
 
 
 export default function VocabDisplay({ onBackToHome, onQuizStart, Type }: QuizDisplayProps) {
-  const { vocabData, preLearnedWordCount, markWordAsLearned } = useVocabUpdater();
+  const { vocabData, markWordAsLearned } = useVocabUpdater();
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0); // 現在の単語のインデックス
   const [currentAudioIndex, setCurrentAudioIndex] = useState<number>(0); // 現在の音声のインデックス
   const [isPlaying, setIsPlaying] = useState<boolean>(true); // 音声再生の状態
@@ -98,7 +97,6 @@ export default function VocabDisplay({ onBackToHome, onQuizStart, Type }: QuizDi
   
 
   const currentWordData: VocabWord = vocabData[currentWordIndex];
-  const completeLearnedWordCount = vocabDataRaw.filter(word => word.quiz_level === 3).length
 
   useEffect(() => {
     localStorage.setItem('ENG_learning_selectedItems', JSON.stringify(selectedItems));
@@ -148,12 +146,6 @@ export default function VocabDisplay({ onBackToHome, onQuizStart, Type }: QuizDi
   };
 
 
-  // 「覚えた」ボタンを押したときの処理
- // 覚えた単語をマークする関数を呼び出す
- const handleMarkAsLearned = () => {
-  markWordAsLearned(currentWordData.id,  { remind_frag: true });
-  nextWord(); // 自動的に次の単語に進む
-};
 
 
   // デバッグ用: selectedItems と currentAudioIndex をログ出力
@@ -208,7 +200,7 @@ export default function VocabDisplay({ onBackToHome, onQuizStart, Type }: QuizDi
           />
           {vocabData.length}
         </div>
-           {/* 覚えたボタンの追加 */}
+           {/* 覚えたボタンの追加
            <div className="flex items-center justify-center mt-4">
            <button
             onClick={handleMarkAsLearned}
@@ -223,16 +215,7 @@ export default function VocabDisplay({ onBackToHome, onQuizStart, Type }: QuizDi
             >
               クイズに挑戦
             </button>
-
-          {/* 覚えた単語数の表示 */}
-          <span className="text-lg  text-gray-700">
-              追加単語数：{preLearnedWordCount}
-            </span>
-            {/* 覚えた単語数の表示 */}
-            <span className="ml-4 text-lg text-gray-700">
-              （合格単語数：{completeLearnedWordCount}）
-            </span>
-          </div>
+          </div> */}
         </div>
 
         {/* 画像の表示 */}

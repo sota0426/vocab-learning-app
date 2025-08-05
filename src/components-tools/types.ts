@@ -22,8 +22,8 @@ export interface VocabWord {
     JPN_1: string;
     JPN_2: string;
     JPN_3: string;
-    remind_frag: boolean;
-    quiz_level: number;
+    // remind_frag?: boolean;
+    // quiz_level?: number;
   }
   
   export interface SelectedItem {

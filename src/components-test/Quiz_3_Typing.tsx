@@ -18,7 +18,9 @@ export default function QuizTyping({ onBackToHome, onQuizStart }: QuizDisplayPro
   const [isAnswerVisible, setIsAnswerVisible] = useState<boolean>(false); // 答えを表示するかどうかの状態
   const [isPlaying, setIsPlaying] = useState<boolean>(true); // 音声再生判定
 
-  const vocabData: VocabWord[] = vocabDataRaw.filter(word => word.remind_frag === true);
+  // const vocabData: VocabWord[] = vocabDataRaw.filter(word => word.remind_frag === true);
+  const vocabData: VocabWord[] = vocabDataRaw;
+
   const currentWordData: VocabWord = vocabData[currentWordIndex];
 
   const navigate = useNavigate();

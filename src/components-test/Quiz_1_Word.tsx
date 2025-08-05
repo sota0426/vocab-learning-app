@@ -23,7 +23,8 @@ export default function WordQuiz({ onBackToHome, onQuizStart, Type, hintOption }
 
   const navigate = useNavigate();
 
-  const vocabData: VocabWord[] = vocabDataRaw.filter(word => word.remind_frag === true);
+  // const vocabData: VocabWord[] = vocabDataRaw.filter(word => word.remind_frag === true);
+  const vocabData: VocabWord[] = vocabDataRaw;
   const currentWordData: VocabWord = vocabData[currentWordIndex];
 
 

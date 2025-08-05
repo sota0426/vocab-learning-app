@@ -22,12 +22,12 @@ export interface VocabWord {
     JPN_1: string;
     JPN_2: string;
     JPN_3: string;
-    remind_frag: boolean;
-    quiz_level_1: number;
-    quiz_level_2: number;
-    quiz_level_3: number;
-    quiz_level_4: number;
-    quiz_level_5: number;
+    // remind_frag: boolean;
+    // quiz_level_1: number;
+    // quiz_level_2: number;
+    // quiz_level_3: number;
+    // quiz_level_4: number;
+    // quiz_level_5: number;
   }
   
   export interface SelectedItem {

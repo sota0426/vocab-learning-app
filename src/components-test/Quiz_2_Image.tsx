@@ -22,7 +22,9 @@ export default function ImageQuiz({ onBackToHome, onQuizStart}: QuizDisplayProps
 
   const navigate = useNavigate();
 
-  const vocabData: VocabWord[] = vocabDataRaw.filter(word => word.remind_frag === true);
+  // const vocabData: VocabWord[] = vocabDataRaw.filter(word => word.remind_frag === true);
+  const vocabData: VocabWord[] = vocabDataRaw;
+
   const currentWordData: VocabWord = vocabData[currentWordIndex];
 
   // クイズの選択肢として表示する画像の生成

@@ -4,7 +4,6 @@ import VocabDisplay from './components-learn/VocabDisplay';
 import WordQuiz from './components-test/Quiz_1_Word'; 
 import ImageQuiz from './components-test/Quiz_2_Image';
 import QuizTyping from './components-test/Quiz_3_Typing';
-import { QuizFinished } from './components-test/Quiz_component';
 
 // メニューコンポーネントを分離（useNavigateを使用するため）
 const MenuPage = () => {
